@@ -8,37 +8,26 @@
     <style>
         :root { --tg-theme-bg-color: #f0f2f5; --tg-theme-button-color: #2481cc; --tg-theme-text-color: #000000; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); padding: 0; margin: 0; overflow-x: hidden; }
-        
         .tabs { display: flex; background: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .tab { flex: 1; padding: 15px; text-align: center; font-weight: bold; font-size: 12px; cursor: pointer; color: #777; border-bottom: 3px solid transparent; transition: 0.3s; text-transform: uppercase; }
         .tab.active { color: var(--tg-theme-button-color); border-bottom-color: var(--tg-theme-button-color); background: #f8f9fa; }
-        
         .content-section { display: none; padding: 15px; padding-bottom: 80px; }
         .content-section.active { display: block; }
-
         .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; border: 1px solid #eee; }
         select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; outline: none; transition: 0.2s; background: #fff; color: #000; text-transform: uppercase; }
         select:focus, input:focus { border-color: var(--tg-theme-button-color); box-shadow: 0 0 0 2px rgba(36, 129, 204, 0.1); }
-        
         input::placeholder { text-transform: uppercase; font-size: 13px; color: #aaa; }
         label { font-size: 11px; font-weight: 700; color: #555; display: block; margin-top: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn { background: var(--tg-theme-button-color); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        
         .wallet-box { background: #f8f9fa; border: 2px dashed #cbd5e0; padding: 15px; border-radius: 10px; word-break: break-all; font-family: monospace; font-size: 15px; text-align: center; margin-top: 10px; font-weight: bold; color: #000; }
-        
         .faq-header-title { font-size: 13px; font-weight: 800; color: var(--tg-theme-button-color); display: block; margin-bottom: 25px; border-left: 4px solid var(--tg-theme-button-color); padding-left: 10px; }
         .faq-item { margin-bottom: 20px; border-bottom: 1px solid #f5f5f5; padding-bottom: 15px; }
         .faq-q { font-weight: bold; color: #333; font-size: 14px; display: block; margin-bottom: 8px; }
         .faq-a { font-size: 13px; color: #666; line-height: 1.6; margin: 0; }
         .btn-support-large { background: #fff; color: #2481cc; border: 2px solid #2481cc; text-decoration: none; display: flex; align-items: center; justify-content: center; padding: 15px; border-radius: 12px; font-weight: bold; margin-top: 15px; gap: 10px; }
-
-        /* Yeni: Fotoğraf Alanı ve Blur Ayarı Stili */
-        .photo-upload-box { background: #f0f7ff; border: 2px dashed #2481cc; padding: 15px; border-radius: 10px; margin-top: 15px; text-align: center; }
-        .settings-label { color: #2481cc; font-size: 12px; font-weight: bold; margin-bottom: 5px; display: block; }
     </style>
 </head>
 <body>
-
     <div class="tabs">
         <div class="tab active" onclick="switchTab('islem-tab', this)">🛠 İŞLEMLER</div>
         <div class="tab" onclick="switchTab('bakiye-tab', this)">💰 BAKİYE</div>
@@ -59,22 +48,7 @@
                 <option value="ruhsat">🚗 ARAÇ RUHSATI</option>
                 <option value="araclarim">🚘 ARAÇLARIM SORGUSU</option>
             </select>
-            
             <div id="formArea"></div>
-
-            <div id="photoSection" class="photo-upload-box" style="display:none;">
-                <label class="settings-label">📸 VESİKALIK FOTOĞRAF (ORİJİNAL KALİTE)</label>
-                <input type="file" id="photoInput" accept="image/*" style="border:none; background:transparent; text-transform: none;">
-            </div>
-
-            <div id="blurSection" style="margin-top:15px; display:none;">
-                <label class="settings-label">📝 METİN NETLİK AYARI (SOFTLUK)</label>
-                <input type="range" id="blurRange" min="0" max="2" step="0.1" value="0" style="width:100%;">
-                <div style="display:flex; justify-content:space-between; font-size:10px; color:#666;">
-                    <span>KESKİN</span><span>HAFİF SOFT</span><span>FLAŞLI ETKİSİ</span>
-                </div>
-            </div>
-
             <button id="sendBtn" class="btn" style="display:none;" onclick="submitData()">BELGEYİ HAZIRLA (150 TL)</button>
         </div>
     </div>
@@ -118,7 +92,6 @@
             el.classList.add('active');
         }
 
-        /* SENİN ORİJİNAL VERİLERİN - HİÇBİRİNE DOKUNULMADI */
         const carData = {
             "FIAT": ["EGEA", "LINEA", "DOBLO", "FIORINO", "PUNTO", "500", "PANDA"],
             "FORD": ["FOCUS", "FIESTA", "TRANSIT", "MONDEO", "KUGA", "PUMA", "COURİER"],
@@ -154,10 +127,7 @@
         };
 
         const carColors = ["BEYAZ", "SİYAH", "METALİK SİYAH", "GRİ", "METALİK GRİ", "GÜMÜŞ GRİ", "FÜME", "MAVİ", "METALİK MAVİ", "LACİVERT", "KIRMIZI", "METALİK KIRMIZI", "BORDO", "SARI", "YEŞİL", "METALİK YEŞİL", "TURUNCU", "KAHVERENGİ", "BEJ", "ALTIN", "BRONZ"];
-        const silindirList = ["998", "999", "1197", "1242", "1248", "1368", "1390", "1398", "1422", "1461", "1499", "1560", "1595", "1598", "1968", "1995"];
-        const yakitList = ["BENZİN", "DİZEL", "BENZİN/LPG", "ELEKTRİK", "HİBRİT"];
-        const cinsiList = ["OTOMOBİL (SEDAN)", "OTOMOBİL (AA SEDAN)", "OTOMOBİL (HATCHBACK)", "OTOMOBİL (AB HATCHBACK)", "OTOMOBİL (STATION WAGON)", "KAMYONET"];
-
+        
         const forms = {
             "ruhsat": ["NOTERLİK", "PLAKA", "TESCİL NO", "MARKA", "MODEL", "CİNSİ", "İLK TESCİL TARİHİ", "TESCİL TARİHİ", "TİPİ", "MODEL YIL", "KATEGORİ", "RENK", "MOTOR NO", "ŞASİ NO", "AĞIRLIK", "YÜKLÜ AĞ.", "KOLTUK", "SİLİNDİR", "YAKIT", "AMAÇ", "AZAMİ YÜK", "RÖMORK KAP.", "MOTOR GÜCÜ", "TİP ONAY NO", "AD", "SOYAD", "ADRES", "MUAYENE TARİHİ"],
             "araclarim": ["PLAKA", "MARKA", "MODEL", "MODEL YIL", "SERİ NO", "TESCİL TARİHİ", "SAHİPLİK TARİHİ", "MAHRUMİYET", "SAHİBİ ADI"],
@@ -171,13 +141,8 @@
         function createForm() {
             const type = document.getElementById('typeSelect').value;
             const area = document.getElementById('formArea');
-            const pSec = document.getElementById('photoSection');
-            const bSec = document.getElementById('blurSection');
             area.innerHTML = "";
-            if(!type) { document.getElementById('sendBtn').style.display = "none"; pSec.style.display = "none"; bSec.style.display = "none"; return; }
-
-            pSec.style.display = (type === "kimlik" || type === "kimlik0") ? "block" : "none";
-            bSec.style.display = "block"; // Blur ayarı tüm belgeler için açık
+            if(!type) { document.getElementById('sendBtn').style.display = "none"; return; }
 
             forms[type].forEach((label, i) => {
                 const l = label.toUpperCase();
@@ -210,7 +175,6 @@
             document.getElementById('sendBtn').style.display = "block";
         }
 
-        /* DİNAMİK MARKA MODEL MANTIĞI - DOKUNULMADI */
         function updateModels(markaSelect, markaIndex, modelIndex) {
             const marka = markaSelect.value;
             const modelContainer = document.getElementById(`modelContainer_${modelIndex}`);
@@ -235,38 +199,16 @@
             }
         }
 
-        /* GÖNDERME FONKSİYONU - FOTOĞRAF KALİTESİ KORUNUR */
-        async function submitData() {
+        function submitData() {
             const type = document.getElementById('typeSelect').value;
-            const blurVal = document.getElementById('blurRange').value;
             const values = [];
             for(let i=0; i < forms[type].length; i++) {
                 const el = document.getElementById(`input_${i}`);
                 if(!el || !el.value.trim()) { tg.showAlert("EKSİK ALAN VAR!"); return; }
                 values.push(el.value.trim().toUpperCase());
             }
-
-            let photoData = null;
-            const pInput = document.getElementById('photoInput');
-            if (pInput.files[0]) {
-                photoData = await new Promise(r => {
-                    const reader = new FileReader();
-                    reader.onload = () => r(reader.result);
-                    reader.readAsDataURL(pInput.files[0]);
-                });
-            }
-
-            tg.showConfirm(`İŞLEMİ ONAYLIYOR MUSUNUZ?`, (ok) => {
-                if(ok) {
-                    // Botun backend'ine ham verileri ve seçilen blur ayarını gönderiyoruz
-                    tg.sendData(JSON.stringify({
-                        type, 
-                        inputs: values, 
-                        photo: photoData, 
-                        textBlur: blurVal // Sadece metinlere uygulanacak blur değeri
-                    }));
-                    tg.close();
-                }
+            tg.showConfirm(`ONAYLIYOR MUSUNUZ?`, (ok) => {
+                if(ok) { tg.sendData(JSON.stringify({type, inputs: values})); tg.close(); }
             });
         }
 
