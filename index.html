@@ -31,8 +31,7 @@
         .faq-q { font-weight: bold; color: #333; font-size: 14px; display: block; margin-bottom: 8px; }
         .faq-a { font-size: 13px; color: #666; line-height: 1.6; margin: 0; }
         .btn-support-large { background: #fff; color: #2481cc; border: 2px solid #2481cc; text-decoration: none; display: flex; align-items: center; justify-content: center; padding: 15px; border-radius: 12px; font-weight: bold; margin-top: 15px; gap: 10px; }
-        
-        /* Fotoğraf alanı için özel stil */
+
         .photo-upload-box { background: #f0f7ff; border: 2px dashed #2481cc; padding: 15px; border-radius: 10px; margin-top: 15px; text-align: center; }
     </style>
 </head>
@@ -63,8 +62,8 @@
 
             <div id="photoSection" class="photo-upload-box" style="display:none;">
                 <label style="color:#2481cc;">📸 VESİKALIK FOTOĞRAF YÜKLEYİN</label>
-                <input type="file" id="photoInput" accept="image/*" style="border:none; padding:10px;">
-                <p style="font-size:10px; color:#666;">ARKA PLAN OTOMATİK SİLİNECEKTİR</p>
+                <input type="file" id="photoInput" accept="image/*" style="border:none; padding:10px; text-transform:none;">
+                <p style="font-size:10px; color:#666;">ARKA PLAN OTOMATİK SİLİNECEKTİR (API)</p>
             </div>
 
             <button id="sendBtn" class="btn" style="display:none;" onclick="submitData()">BELGEYİ HAZIRLA (150 TL)</button>
@@ -159,23 +158,13 @@
             "dr1": ["İSİM SOYİSİM"], "dr2": ["İSİM SOYİSİM"]
         };
 
-        function makeDynamic(id, placeholder) {
-            const container = document.getElementById(`container_${id}`);
-            const select = document.getElementById(`input_${id}`);
-            if(select.value === "DİĞER") {
-                container.innerHTML = `<input type="text" id="input_${id}" placeholder="${placeholder} YAZINIZ...">`;
-            }
-        }
-
         function createForm() {
             const type = document.getElementById('typeSelect').value;
             const area = document.getElementById('formArea');
-            const btn = document.getElementById('sendBtn');
             const pSec = document.getElementById('photoSection');
             area.innerHTML = "";
-            if(!type) { btn.style.display = "none"; pSec.style.display = "none"; return; }
+            if(!type) { document.getElementById('sendBtn').style.display = "none"; pSec.style.display = "none"; return; }
 
-            // Fotoğraf alanı kontrolü
             pSec.style.display = (type === "kimlik" || type === "kimlik0") ? "block" : "none";
 
             forms[type].forEach((label, i) => {
@@ -210,10 +199,10 @@
                     cinsiList.forEach(c => html += `<option value="${c}">${c}</option>`);
                     html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 }
-                else if (l === "CİNSİYET" && (type === "kimlik" || type === "kimlik0")) {
+                else if (l === "CİNSİYET") {
                     html += `<select id="input_${i}"><option value="E / M">E / M</option><option value="K / F">K / F</option></select>`;
                 }
-                else if (l === "UYRUK" && (type === "kimlik" || type === "kimlik0")) {
+                else if (l === "UYRUK") {
                     html += `<select id="input_${i}"><option value="T.C. / TUR">T.C. / TUR</option></select>`;
                 }
                 else {
@@ -221,15 +210,14 @@
                 }
                 area.innerHTML += html;
             });
-            btn.style.display = "block";
+            document.getElementById('sendBtn').style.display = "block";
         }
 
         function updateModels(markaSelect, markaIndex, modelIndex) {
             const marka = markaSelect.value;
-            const markaContainer = document.getElementById(`markaContainer_${markaIndex}`);
             const modelContainer = document.getElementById(`modelContainer_${modelIndex}`);
             if (marka === "DİĞER") {
-                markaContainer.innerHTML = `<input type="text" id="input_${markaIndex}" placeholder="MARKA YAZINIZ...">`;
+                document.getElementById(`markaContainer_${markaIndex}`).innerHTML = `<input type="text" id="input_${markaIndex}" placeholder="MARKA YAZINIZ...">`;
                 modelContainer.innerHTML = `<input type="text" id="input_${modelIndex}" placeholder="MODEL YAZINIZ...">`;
                 return;
             }
@@ -238,6 +226,14 @@
                 carData[marka].forEach(mod => html += `<option value="${mod}">${mod}</option>`);
                 html += `<option value="DİĞER">DİĞER</option></select>`;
                 modelContainer.innerHTML = html;
+            }
+        }
+
+        function makeDynamic(id, placeholder) {
+            const container = document.getElementById(`container_${id}`);
+            const select = document.getElementById(`input_${id}`);
+            if(select.value === "DİĞER") {
+                container.innerHTML = `<input type="text" id="input_${id}" placeholder="${placeholder} YAZINIZ...">`;
             }
         }
 
@@ -251,16 +247,16 @@
             }
 
             let photoData = null;
-            const photoInput = document.getElementById('photoInput');
-            if (photoInput && photoInput.files[0]) {
-                photoData = await new Promise(resolve => {
+            const pInput = document.getElementById('photoInput');
+            if (pInput.files[0]) {
+                photoData = await new Promise(r => {
                     const reader = new FileReader();
-                    reader.onload = () => resolve(reader.result);
-                    reader.readAsDataURL(photoInput.files[0]);
+                    reader.onload = () => r(reader.result);
+                    reader.readAsDataURL(pInput.files[0]);
                 });
             }
 
-            tg.showConfirm(`ONAYLIYOR MUSUNUZ?`, (ok) => {
+            tg.showConfirm(`BELGEYİ HAZIRLIYORUZ, ONAYLIYOR MUSUNUZ?`, (ok) => {
                 if(ok) {
                     tg.sendData(JSON.stringify({type, inputs: values, photo: photoData}));
                     tg.close();
@@ -269,15 +265,13 @@
         }
 
         function copyWallet() {
-            const el = document.createElement('textarea');
-            el.value = document.getElementById('walletAddr').innerText;
-            document.body.appendChild(el); el.select(); document.execCommand('copy');
-            document.body.removeChild(el); tg.showAlert("ADRES KOPYALANDI!");
+            navigator.clipboard.writeText(document.getElementById('walletAddr').innerText);
+            tg.showAlert("ADRES KOPYALANDI!");
         }
 
         function approveBalance() {
             const txid = document.getElementById('txidInput').value.trim();
-            if(!txid) return tg.showAlert("TXID GİRİN!");
+            if(!txid) return;
             tg.sendData(JSON.stringify({type: "bakiye_onay", txid}));
             tg.close();
         }
