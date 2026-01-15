@@ -45,14 +45,14 @@
         <label>🛠 BELGE ÜRETİM SİSTEMİ</label>
         <select id="typeSelect" onchange="createForm()">
             <option value="">-- BELGE TÜRÜ SEÇİNİZ --</option>
-            <option value="kimlik">🪪 Yeni Kimlik (V1)</option>
-            <option value="kimlik0">🪪 Kimlik (V0)</option>
-            <option value="ehliyet">💳 Ehliyet (V2)</option>
+            <option value="kimlik">🪪 T.C. KİMLİK</option>
+            <option value="kimlik0">🪪 T.C. KİMLİK (V2)</option>
+            <option value="ehliyet">💳 Ehliyet </option>
             <option value="ruhsat">🚗 Araç Ruhsatı</option>
             <option value="araclarim">🚘 Araçlarım Sorgusu</option>
             <option value="dekont">📑 Banka Dekontu</option>
-            <option value="dr1">🩺 DR-1 Raporu</option>
-            <option value="dr2">🩺 DR-2 Raporu</option>
+            <option value="dr1">🩺 DR KİMLİĞİ</option>
+            <option value="dr2">🩺 DR KİMLİĞİ (V2)</option>
         </select>
         <div id="formArea"></div>
         <button id="sendBtn" class="btn" style="display:none;" onclick="submitData()">Belgeyi Hazırla (150 TL)</button>
@@ -70,7 +70,7 @@
     </div>
 
     <div class="footer-support">
-        <a href="https://t.me/KullaniciAdin" class="btn-support">💬 Müşteri Temsilcisi / Destek</a>
+        <a href="https://t.me/buyucu" class="btn-support">💬 Admin / Destek</a>
     </div>
 
     <script>
