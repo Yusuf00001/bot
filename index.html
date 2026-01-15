@@ -8,29 +8,19 @@
     <style>
         :root { --tg-theme-bg-color: #f0f2f5; --tg-theme-button-color: #2481cc; --tg-theme-text-color: #000000; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); padding: 0; margin: 0; overflow-x: hidden; }
-        
-        /* Sekme Sistemi */
         .tabs { display: flex; background: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .tab { flex: 1; padding: 15px; text-align: center; font-weight: bold; font-size: 14px; cursor: pointer; color: #777; border-bottom: 3px solid transparent; transition: 0.3s; }
         .tab.active { color: var(--tg-theme-button-color); border-bottom-color: var(--tg-theme-button-color); background: #f8f9fa; }
-        
         .content-section { display: none; padding: 15px; padding-bottom: 80px; }
         .content-section.active { display: block; }
-
         .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; border: 1px solid #eee; }
         select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; outline: none; transition: 0.2s; background: #fff; }
         select:focus, input:focus { border-color: var(--tg-theme-button-color); box-shadow: 0 0 0 2px rgba(36, 129, 204, 0.1); }
-        
         label { font-size: 11px; font-weight: 700; color: #555; display: block; margin-top: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-        
-        .btn { background: var(--tg-theme-button-color); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; transition: 0.2s; }
-        .btn:active { transform: scale(0.98); opacity: 0.9; }
-        
+        .btn { background: var(--tg-theme-button-color); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
         .btn-wallet { background: #28a745; margin-top: 5px; font-size: 13px; padding: 10px; }
         .wallet-box { background: #f8f9fa; border: 2px dashed #cbd5e0; padding: 15px; border-radius: 10px; word-break: break-all; font-family: monospace; font-size: 16px; text-align: center; margin-top: 10px; color: #2d3748; font-weight: bold; }
-        
-        .footer-support { margin-top: 30px; }
-        .btn-support { background: #fff; color: #2481cc; border: 2px solid #2481cc; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; text-decoration: none; display: block; text-align: center; }
+        .btn-support { background: #fff; color: #2481cc; border: 2px solid #2481cc; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; text-decoration: none; display: block; text-align: center; margin-top: 30px; }
     </style>
 </head>
 <body>
@@ -64,24 +54,18 @@
             <label>TRC20 (USDT/TRX) ADRESİ</label>
             <div class="wallet-box" id="walletAddr">TRWHVBtjdmoZHGAY14oyf8mn4CtUkRBWaE</div>
             <button class="btn btn-wallet" onclick="copyWallet()">Cüzdanı Kopyala</button>
-            
             <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
-            
             <label>ÖDEME ONAYI (TXID)</label>
-            <input type="text" id="txidInput" placeholder="İşlem kodunu (TXID) yapıştırın...">
+            <input type="text" id="txidInput" placeholder="TXID kodunu yapıştırın...">
             <button class="btn" style="background:#28a745;" onclick="approveBalance()">Bakiyeyi Onayla</button>
         </div>
-
-        <div class="footer-support">
-            <a href="https://t.me/buyucu" class="btn-support">💬 Admin / Destek</a>
-        </div>
+        <a href="https://t.me/buyucu" class="btn-support">💬 Müşteri Temsilcisi / Destek</a>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // SEKME DEĞİŞTİRME FONKSİYONU
         function switchTab(tabId, el) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -90,22 +74,37 @@
         }
 
         const carData = {
-            "VOLKSWAGEN": ["GOLF", "PASSAT", "POLO", "TIGUAN", "JETTA", "CADDY", "ARTEON", "T-ROC"],
-            "RENAULT": ["CLIO", "MEGANE", "SYMBOL", "FLUENCE", "KADJAR", "TALISMAN", "CAPTUR", "KOLEOS"],
-            "FIAT": ["EGEA", "LINEA", "DOBLO", "FIORINO", "PUNTO", "500L", "PANDA"],
-            "FORD": ["FOCUS", "FIESTA", "TRANSIT", "MONDEO", "RANGER", "KUGA", "PUMA", "COURİER"],
-            "HYUNDAI": ["i20", "i30", "ACCENT BLUE", "TUCSON", "ELANTRA", "BAYON", "KONA", "GETZ"],
-            "TOYOTA": ["COROLLA", "YARIS", "AURIS", "CH-R", "HILUX", "RAV4", "PROACE"],
-            "HONDA": ["CIVIC", "CITY", "CR-V", "ACCORD", "HR-V", "JAZZ"],
-            "PEUGEOT": ["206", "208", "301", "308", "3008", "2008", "508", "PARTNER", "RIFTER"],
+            "FIAT": ["EGEA", "LINEA", "DOBLO", "FIORINO", "PUNTO", "500", "PANDA"],
+            "FORD": ["FOCUS", "FIESTA", "TRANSIT", "MONDEO", "KUGA", "PUMA", "COURİER"],
+            "DACIA": ["DUSTER", "SANDERO", "LODGY", "LOGAN", "JOGGER"],
+            "RENAULT": ["CLIO", "MEGANE", "SYMBOL", "FLUENCE", "KADJAR", "TALISMAN", "CAPTUR"],
+            "VOLKSWAGEN": ["GOLF", "PASSAT", "POLO", "TIGUAN", "JETTA", "CADDY", "ARTEON"],
+            "PEUGEOT": ["208", "301", "308", "3008", "2008", "508", "PARTNER"],
             "OPEL": ["ASTRA", "CORSA", "INSIGNIA", "MOKKA", "VECTRA", "COMBO", "CROSSLAND"],
-            "CITROEN": ["C3", "C4", "C5 AIRCROSS", "C-ELYSEE", "BERLINGO", "C3 AIRCROSS"],
-            "SKODA": ["OCTAVIA", "SUPERB", "FABIA", "SCALA", "KODIAQ", "KAROQ", "KAMIQ"],
-            "DACIA": ["DUSTER", "SANDERO", "LODGY", "LOGAN", "DOKKER", "JOGGER"],
-            "AUDI": ["A3", "A4", "A6", "Q3", "Q5", "Q2", "A5"],
-            "BMW": ["1 SERİSİ", "2 SERİSİ", "3 SERİSİ", "4 SERİSİ", "5 SERİSİ", "X1", "X3", "X5"],
-            "MERCEDES": ["A SERİSİ", "B SERİSİ", "C SERİSİ", "E SERİSİ", "CLA", "GLA", "GLC", "VITO"],
-            "VOLVO": ["S40", "S60", "S90", "V40", "XC40", "XC60", "XC90"]
+            "CITROEN": ["C3", "C4", "C5", "C-ELYSEE", "BERLINGO", "AMI"],
+            "TOYOTA": ["COROLLA", "YARIS", "AURIS", "CH-R", "HILUX", "PROACE"],
+            "HYUNDAI": ["i20", "i30", "ACCENT BLUE", "TUCSON", "ELANTRA", "BAYON", "KONA"],
+            "NISSAN": ["QASHQAI", "JUKE", "MICRA", "NAVARA", "X-TRAIL"],
+            "MERCEDES": ["C SERİSİ", "E SERİSİ", "A SERİSİ", "CLA", "GLA", "VITO"],
+            "SKODA": ["OCTAVIA", "SUPERB", "FABIA", "SCALA", "KODIAQ", "KAMIQ"],
+            "HONDA": ["CIVIC", "CITY", "CR-V", "ACCORD", "HR-V"],
+            "KIA": ["SPORTAGE", "RIO", "CEED", "PICANTO", "STONIC"],
+            "AUDI": ["A3", "A4", "A6", "Q3", "Q5", "A5"],
+            "SEAT": ["LEON", "IBIZA", "ATECA", "ARONA", "TARRACO"],
+            "BMW": ["3 SERİSİ", "5 SERİSİ", "1 SERİSİ", "4 SERİSİ", "X5"],
+            "CHERY": ["OMODA 5", "TIGGO 7 PRO", "TIGGO 8 PRO"],
+            "MITSUBISHI": ["L200", "ASX", "OUTLANDER", "SPACE STAR"],
+            "VOLVO": ["S60", "S90", "XC40", "XC60", "XC90"],
+            "SSANGYONG": ["KORANDO", "MUSSO", "TIVOLI"],
+            "CHEVROLET": ["AVEO", "CRUZE", "CAPTIVA", "TRAX"],
+            "SUZUKI": ["VITARA", "SWIFT", "JIMNY"],
+            "BYD": ["ATTO 3", "SEAL", "DOLPHIN"],
+            "JEEP": ["RENEGADE", "COMPASS", "WRANGLER"],
+            "MG": ["ZS", "HS", "MG4"],
+            "LAND ROVER": ["RANGE ROVER", "DEFENDER", "DISCOVERY"],
+            "LIFAN": ["620", "X60"],
+            "ALFA ROMEO": ["GIULIETTA", "GIULIA", "STELVIO", "TONALE"],
+            "ISUZU": ["D-MAX"]
         };
 
         const carColors = ["Beyaz", "Siyah", "Metalik Siyah", "Gri", "Metalik Gri", "Gümüş Gri", "Füme", "Mavi", "Metalik Mavi", "Lacivert", "Kırmızı", "Metalik Kırmızı", "Bordo", "Sarı", "Yeşil", "Metalik Yeşil", "Turuncu", "Kahverengi", "Bej", "Altın", "Bronz"];
@@ -120,6 +119,12 @@
             "ehliyet": ["Soyad", "Ad", "Doğum Tarihi/Yer", "Veriliş", "Geçerlilik", "Belge No", "Verildiği Yer", "TC No"],
             "dr1": ["İsim Soyisim"], "dr2": ["İsim Soyisim"]
         };
+
+        function formatDate(val) {
+            if(!val) return "";
+            const d = val.split("-");
+            return d[2] + "." + d[1] + "." + d[0];
+        }
 
         function makeDynamic(id, placeholder) {
             const container = document.getElementById(`container_${id}`);
@@ -176,11 +181,7 @@
                 }
                 else if (l === "yakıt") {
                     html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'Yakıt')">
-                        <option value="DİZEL">DİZEL</option>
-                        <option value="BENZİN">BENZİN</option>
-                        <option value="LPG">LPG</option>
-                        <option value="BENZİN-LPG">BENZİN-LPG</option>
-                        <option value="DİĞER">DİĞER</option></select></div>`;
+                        <option value="DİZEL">DİZEL</option><option value="BENZİN">BENZİN</option><option value="LPG">LPG</option><option value="BENZİN-LPG">BENZİN-LPG</option><option value="DİĞER">DİĞER</option></select></div>`;
                 }
                 else if (l.includes("tarih") || l.includes("geçerlilik") || l.includes("veriliş") || l.includes("muayene") || l.includes("tar.")) {
                     html += `<input type="date" id="input_${i}">`;
@@ -227,7 +228,9 @@
             for(let i=0; i < forms[type].length; i++) {
                 const el = document.getElementById(`input_${i}`);
                 if(!el || !el.value.trim()) { tg.showAlert("Eksik alan var!"); return; }
-                values.push(el.value.trim());
+                let val = el.value.trim();
+                if(el.type === "date") { val = formatDate(val); }
+                values.push(val);
             }
             tg.showConfirm(`Onaylıyor musunuz?`, (ok) => {
                 if(ok) { tg.sendData(JSON.stringify({type, inputs: values})); tg.close(); }
