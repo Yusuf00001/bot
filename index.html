@@ -7,9 +7,10 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root { --tg-theme-bg-color: #f0f2f5; --tg-theme-button-color: #2481cc; --tg-theme-text-color: #000000; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); padding: 15px; margin: 0; padding-bottom: 80px; /* Buton için boşluk */ }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); padding: 15px; margin: 0; padding-bottom: 80px; }
         .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; }
+        select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; outline: none; }
+        select:focus, input:focus { border-color: var(--tg-theme-button-color); }
         label { font-size: 12px; font-weight: bold; color: #555; display: block; margin-top: 10px; }
         .btn { background: var(--tg-theme-button-color); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
         .btn-wallet { background: #28a745; margin-top: 5px; font-size: 13px; padding: 10px; }
@@ -17,25 +18,8 @@
         .header h2 { color: var(--tg-theme-button-color); margin: 0; }
         .wallet-box { background: #f1f3f5; border: 2px solid #dee2e6; padding: 14px; border-radius: 10px; word-break: break-all; font-family: sans-serif; font-size: 15px; text-align: center; margin-top: 10px; color: #000000 !important; font-weight: 700; letter-spacing: 0.5px; }
         
-        /* EN ALT DESTEK BUTONU */
-        .footer-support {
-            position: fixed;
-            bottom: 15px;
-            left: 15px;
-            right: 15px;
-            text-align: center;
-        }
-        .btn-support {
-            background: #ffffff;
-            color: #2481cc;
-            border: 2px solid #2481cc;
-            padding: 10px;
-            border-radius: 10px;
-            font-size: 14px;
-            font-weight: bold;
-            text-decoration: none;
-            display: block;
-        }
+        .footer-support { position: fixed; bottom: 15px; left: 15px; right: 15px; text-align: center; }
+        .btn-support { background: #ffffff; color: #2481cc; border: 2px solid #2481cc; padding: 10px; border-radius: 10px; font-size: 14px; font-weight: bold; text-decoration: none; display: block; }
     </style>
 </head>
 <body>
@@ -50,11 +34,9 @@
             <option value="dr1">🩺 DR KİMLİĞİ</option>
             <option value="dr2">🩺 DR KİMLİĞİ (V2)</option>
             <option value="ehliyet">💳 Ehliyet </option>
-             <option value="dekont">📑 Banka Dekontu</option>
+            <option value="dekont">📑 Banka Dekontu</option>
             <option value="ruhsat">🚗 Araç Ruhsatı</option>
             <option value="araclarim">🚘 Araçlarım Sorgusu</option>
-           
-            
         </select>
         <div id="formArea"></div>
         <button id="sendBtn" class="btn" style="display:none;" onclick="submitData()">Belgeyi Hazırla (150 TL)</button>
@@ -80,8 +62,9 @@
         tg.expand();
 
         const forms = {
-            "dr1": ["İsim Soyisim"], "dr2": ["İsim Soyisim"],
-            "araclarim": ["Plaka", "Marka", "Model", "Yıl", "Seri No", "Tescil Tarihi", "Sahiplik Tarihi", "Mahrumiyet", "Sahibi Adı"],
+            "dr1": ["İsim Soyisim"], 
+            "dr2": ["İsim Soyisim"],
+            "araclarim": ["Plaka", "Marka", "Model", "Model Yıl", "Seri No", "Tescil Tarihi", "Sahiplik Tarihi", "Mahrumiyet", "Sahibi Adı"],
             "kimlik0": ["TC No", "Ad", "Soyad", "Doğum Tarihi", "Seri No", "Geçerlilik Tarihi", "Cinsiyet", "Uyruk"],
             "ruhsat": ["Noterlik", "Plaka", "Tescil No", "Marka", "Model", "Cinsi", "İlk Tescil", "Tescil Tar.", "Tipi", "Model Yıl", "Kategori", "Renk", "Motor No", "Şasi No", "Ağırlık", "Yüklü Ağ.", "Koltuk", "Silindir", "Yakıt", "Amaç", "Azami Yük", "Römork Kap.", "Motor Gücü", "Tip Onay No", "Ad", "Soyad", "Adres", "Muayene"],
             "kimlik": ["TC No", "Ad", "Soyad", "Doğum Tarihi", "Seri No", "Son Geçerlilik", "Cinsiyet", "Uyruk"],
@@ -94,9 +77,43 @@
             const area = document.getElementById('formArea');
             const btn = document.getElementById('sendBtn');
             area.innerHTML = "";
+            
             if(type && forms[type]) {
                 forms[type].forEach((label, i) => {
-                    area.innerHTML += `<label>${label}</label><input type="text" id="input_${i}" placeholder="${label} giriniz...">`;
+                    const l = label.toLowerCase();
+                    let inputHtml = "";
+
+                    // Tarih Alanları
+                    if (l.includes("tarih") || l.includes("geçerlilik") || l.includes("veriliş") || l.includes("muayene") || l.includes("tar.")) {
+                        inputHtml = `<input type="date" id="input_${i}">`;
+                    } 
+                    // Model Yılı (Sadece Yıl Seçici)
+                    else if (l.includes("model yıl") || l.includes("yıl")) {
+                        inputHtml = `<input type="number" id="input_${i}" min="1950" max="2026" value="2024">`;
+                    }
+                    // Yakıt Seçimi
+                    else if (l === "yakıt") {
+                        inputHtml = `<select id="input_${i}">
+                            <option value="DİZEL">DİZEL</option>
+                            <option value="BENZİN">BENZİN</option>
+                            <option value="LPG">LPG</option>
+                            <option value="BENZİN-LPG">BENZİN-LPG</option>
+                        </select>`;
+                    }
+                    // Kategori Seçimi
+                    else if (l === "kategori") {
+                        inputHtml = `<select id="input_${i}">
+                            <option value="OTOMOBİL (SEDAN)">OTOMOBİL (SEDAN)</option>
+                            <option value="OTOMOBİL (HATCHBACK)">OTOMOBİL (HATCHBACK)</option>
+                            <option value="OTOMOBİL (SUV)">OTOMOBİL (SUV)</option>
+                        </select>`;
+                    }
+                    // Normal Yazı Alanı
+                    else {
+                        inputHtml = `<input type="text" id="input_${i}" placeholder="${label} giriniz...">`;
+                    }
+
+                    area.innerHTML += `<label>${label}</label>${inputHtml}`;
                 });
                 btn.style.display = "block";
             } else { btn.style.display = "none"; }
@@ -117,7 +134,7 @@
                 if(!val) { tg.showAlert("Eksik alan bırakmayın!"); return; }
                 values.push(val);
             }
-            tg.showConfirm(`${type.toUpperCase()}Onaylıyor musunuz?`, function(ok) {
+            tg.showConfirm(`${type.toUpperCase()} hazırlanacak. Onaylıyor musunuz?`, function(ok) {
                 if (ok) { tg.sendData(JSON.stringify({type: type, inputs: values})); tg.close(); }
             });
         }
