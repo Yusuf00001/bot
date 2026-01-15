@@ -9,15 +9,14 @@
         :root { --tg-theme-bg-color: #f0f2f5; --tg-theme-button-color: #2481cc; --tg-theme-text-color: #000000; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); padding: 15px; margin: 0; padding-bottom: 80px; }
         .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; outline: none; }
-        select:focus, input:focus { border-color: var(--tg-theme-button-color); }
-        label { font-size: 12px; font-weight: bold; color: #555; display: block; margin-top: 10px; }
+        select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; outline: none; transition: 0.2s; }
+        select:focus, input:focus { border-color: var(--tg-theme-button-color); border-width: 2px; }
+        label { font-size: 12px; font-weight: bold; color: #555; display: block; margin-top: 10px; text-transform: uppercase; }
         .btn { background: var(--tg-theme-button-color); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
         .btn-wallet { background: #28a745; margin-top: 5px; font-size: 13px; padding: 10px; }
         .header { text-align: center; margin-bottom: 15px; }
         .header h2 { color: var(--tg-theme-button-color); margin: 0; }
-        .wallet-box { background: #f1f3f5; border: 2px solid #dee2e6; padding: 14px; border-radius: 10px; word-break: break-all; font-family: sans-serif; font-size: 15px; text-align: center; margin-top: 10px; color: #000000 !important; font-weight: 700; letter-spacing: 0.5px; }
-        
+        .wallet-box { background: #f1f3f5; border: 2px solid #dee2e6; padding: 14px; border-radius: 10px; word-break: break-all; font-family: sans-serif; font-size: 15px; text-align: center; margin-top: 10px; color: #000000 !important; font-weight: 700; }
         .footer-support { position: fixed; bottom: 15px; left: 15px; right: 15px; text-align: center; }
         .btn-support { background: #ffffff; color: #2481cc; border: 2px solid #2481cc; padding: 10px; border-radius: 10px; font-size: 14px; font-weight: bold; text-decoration: none; display: block; }
     </style>
@@ -44,7 +43,6 @@
 
     <div class="card" style="border-top: 4px solid #28a745;">
         <label>💰 BAKİYE YÜKLEME & ONAY</label>
-        <p style="font-size: 13px; color: #666;">TRX (TRC-20) gönderdikten sonra TXID kodunu girin.</p>
         <div class="wallet-box" id="walletAddr">TRWHVBtjdmoZHGAY14oyf8mn4CtUkRBWaE</div>
         <button class="btn btn-wallet" onclick="copyWallet()">Cüzdanı Kopyala</button>
         <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
@@ -61,15 +59,34 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
+        const carData = {
+            "VOLKSWAGEN": ["GOLF", "PASSAT", "POLO", "TIGUAN", "JETTA", "CADDY", "ARTEON", "T-ROC"],
+            "RENAULT": ["CLIO", "MEGANE", "SYMBOL", "FLUENCE", "KADJAR", "TALISMAN", "CAPTUR", "KOLEOS"],
+            "FIAT": ["EGEA", "LINEA", "DOBLO", "FIORINO", "PUNTO", "500L", "PANDA"],
+            "FORD": ["FOCUS", "FIESTA", "TRANSIT", "MONDEO", "RANGER", "KUGA", "PUMA", "COURİER"],
+            "HYUNDAI": ["i20", "i30", "ACCENT BLUE", "TUCSON", "ELANTRA", "BAYON", "KONA", "GETZ"],
+            "TOYOTA": ["COROLLA", "YARIS", "AURIS", "CH-R", "HILUX", "RAV4", "PROACE"],
+            "HONDA": ["CIVIC", "CITY", "CR-V", "ACCORD", "HR-V", "JAZZ"],
+            "PEUGEOT": ["206", "208", "301", "308", "3008", "2008", "508", "PARTNER", "RIFTER"],
+            "OPEL": ["ASTRA", "CORSA", "INSIGNIA", "MOKKA", "VECTRA", "COMBO", "CROSSLAND"],
+            "CITROEN": ["C3", "C4", "C5 AIRCROSS", "C-ELYSEE", "BERLINGO", "C3 AIRCROSS"],
+            "SKODA": ["OCTAVIA", "SUPERB", "FABIA", "SCALA", "KODIAQ", "KAROQ", "KAMIQ"],
+            "DACIA": ["DUSTER", "SANDERO", "LODGY", "LOGAN", "DOKKER", "JOGGER"],
+            "AUDI": ["A3", "A4", "A6", "Q3", "Q5", "Q2", "A5"],
+            "BMW": ["1 SERİSİ", "2 SERİSİ", "3 SERİSİ", "4 SERİSİ", "5 SERİSİ", "X1", "X3", "X5"],
+            "MERCEDES": ["A SERİSİ", "B SERİSİ", "C SERİSİ", "E SERİSİ", "CLA", "GLA", "GLC", "VITO"],
+            "VOLVO": ["S40", "S60", "S90", "V40", "XC40", "XC60", "XC90"],
+            "DİĞER": []
+        };
+
         const forms = {
-            "dr1": ["İsim Soyisim"], 
-            "dr2": ["İsim Soyisim"],
+            "ruhsat": ["Noterlik", "Plaka", "Tescil No", "Marka", "Model", "Cinsi", "İlk Tescil Tarihi", "Tescil Tarihi", "Tipi", "Model Yıl", "Kategori", "Renk", "Motor No", "Şasi No", "Ağırlık", "Yüklü Ağ.", "Koltuk", "Silindir", "Yakıt", "Amaç", "Azami Yük", "Römork Kap.", "Motor Gücü", "Tip Onay No", "Ad", "Soyad", "Adres", "Muayene Tarihi"],
             "araclarim": ["Plaka", "Marka", "Model", "Model Yıl", "Seri No", "Tescil Tarihi", "Sahiplik Tarihi", "Mahrumiyet", "Sahibi Adı"],
             "kimlik0": ["TC No", "Ad", "Soyad", "Doğum Tarihi", "Seri No", "Geçerlilik Tarihi", "Cinsiyet", "Uyruk"],
-            "ruhsat": ["Noterlik", "Plaka", "Tescil No", "Marka", "Model", "Cinsi", "İlk Tescil", "Tescil Tar.", "Tipi", "Model Yıl", "Kategori", "Renk", "Motor No", "Şasi No", "Ağırlık", "Yüklü Ağ.", "Koltuk", "Silindir", "Yakıt", "Amaç", "Azami Yük", "Römork Kap.", "Motor Gücü", "Tip Onay No", "Ad", "Soyad", "Adres", "Muayene"],
             "kimlik": ["TC No", "Ad", "Soyad", "Doğum Tarihi", "Seri No", "Son Geçerlilik", "Cinsiyet", "Uyruk"],
             "dekont": ["İşlem Türü", "Banka", "Tutar", "Gönderen", "Alıcı IBAN", "Tarih/Saat", "Sorgu No", "Masraf", "Alıcı Ad", "İşlem No", "Açıklama"],
-            "ehliyet": ["Soyad", "Ad", "Doğum Tarihi/Yer", "Veriliş", "Geçerlilik", "Belge No", "Verildiği Yer", "TC No"]
+            "ehliyet": ["Soyad", "Ad", "Doğum Tarihi/Yer", "Veriliş", "Geçerlilik", "Belge No", "Verildiği Yer", "TC No"],
+            "dr1": ["İsim Soyisim"], "dr2": ["İsim Soyisim"]
         };
 
         function createForm() {
@@ -77,46 +94,56 @@
             const area = document.getElementById('formArea');
             const btn = document.getElementById('sendBtn');
             area.innerHTML = "";
-            
-            if(type && forms[type]) {
-                forms[type].forEach((label, i) => {
-                    const l = label.toLowerCase();
-                    let inputHtml = "";
+            if(!type) { btn.style.display = "none"; return; }
 
-                    // Tarih Alanları
-                    if (l.includes("tarih") || l.includes("geçerlilik") || l.includes("veriliş") || l.includes("muayene") || l.includes("tar.")) {
-                        inputHtml = `<input type="date" id="input_${i}">`;
-                    } 
-                    // Model Yılı (Sadece Yıl Seçici)
-                    else if (l.includes("model yıl") || l.includes("yıl")) {
-                        inputHtml = `<input type="number" id="input_${i}" min="1950" max="2026" value="2024">`;
-                    }
-                    // Yakıt Seçimi
-                    else if (l === "yakıt") {
-                        inputHtml = `<select id="input_${i}">
-                            <option value="DİZEL">DİZEL</option>
-                            <option value="BENZİN">BENZİN</option>
-                            <option value="LPG">LPG</option>
-                            <option value="BENZİN-LPG">BENZİN-LPG</option>
-                        </select>`;
-                    }
-                    // Kategori Seçimi
-                    else if (l === "kategori") {
-                        inputHtml = `<select id="input_${i}">
-                            <option value="OTOMOBİL (SEDAN)">OTOMOBİL (SEDAN)</option>
-                            <option value="OTOMOBİL (HATCHBACK)">OTOMOBİL (HATCHBACK)</option>
-                            <option value="OTOMOBİL (SUV)">OTOMOBİL (SUV)</option>
-                        </select>`;
-                    }
-                    // Normal Yazı Alanı
-                    else {
-                        inputHtml = `<input type="text" id="input_${i}" placeholder="${label} giriniz...">`;
-                    }
+            forms[type].forEach((label, i) => {
+                const l = label.toLowerCase();
+                let html = `<label>${label}</label>`;
 
-                    area.innerHTML += `<label>${label}</label>${inputHtml}`;
-                });
-                btn.style.display = "block";
-            } else { btn.style.display = "none"; }
+                if (l === "marka") {
+                    html += `<select id="input_${i}" onchange="updateModels(this, ${i+1})"><option value="">Marka Seçiniz</option>`;
+                    Object.keys(carData).forEach(m => html += `<option value="${m}">${m}</option>`);
+                    html += `</select>`;
+                } 
+                else if (l === "model") {
+                    html += `<div id="modelContainer_${i}"><input type="text" id="input_${i}" placeholder="Önce marka seçiniz"></div>`;
+                }
+                else if (l.includes("tarih") || l.includes("geçerlilik") || l.includes("veriliş") || l.includes("muayene") || l.includes("tar.")) {
+                    html += `<input type="date" id="input_${i}">`;
+                }
+                else if (l.includes("model yıl") || l.includes("yıl")) {
+                    html += `<input type="number" id="input_${i}" min="1950" max="2026" value="2024">`;
+                }
+                else if (l === "yakıt") {
+                    html += `<select id="input_${i}"><option value="DİZEL">DİZEL</option><option value="BENZİN">BENZİN</option><option value="LPG">LPG</option><option value="BENZİN-LPG">BENZİN-LPG</option></select>`;
+                }
+                else if (l === "kategori") {
+                    html += `<select id="input_${i}"><option value="OTOMOBİL (SEDAN)">OTOMOBİL (SEDAN)</option><option value="OTOMOBİL (HATCHBACK)">OTOMOBİL (HATCHBACK)</option><option value="OTOMOBİL (SUV)">OTOMOBİL (SUV)</option></select>`;
+                }
+                else {
+                    html += `<input type="text" id="input_${i}" placeholder="${label} giriniz...">`;
+                }
+                area.innerHTML += html;
+            });
+            btn.style.display = "block";
+        }
+
+        function updateModels(markaSelect, modelIndex) {
+            const marka = markaSelect.value;
+            const container = document.getElementById(`modelContainer_${modelIndex}`);
+            if (marka === "DİĞER" || !carData[marka] || carData[marka].length === 0) {
+                container.innerHTML = `<input type="text" id="input_${modelIndex}" placeholder="Modeli el ile yazınız...">`;
+            } else {
+                let html = `<select id="input_${modelIndex}"><option value="">Model Seçiniz</option>`;
+                carData[marka].forEach(mod => html += `<option value="${mod}">${mod}</option>`);
+                html += `<option value="DİĞER">DİĞER (EL İLE YAZ)</option></select>`;
+                container.innerHTML = html;
+                container.querySelector('select').onchange = function() {
+                    if(this.value === "DİĞER") {
+                        container.innerHTML = `<input type="text" id="input_${modelIndex}" placeholder="Modeli el ile yazınız...">`;
+                    }
+                };
+            }
         }
 
         function copyWallet() {
@@ -134,7 +161,7 @@
                 if(!val) { tg.showAlert("Eksik alan bırakmayın!"); return; }
                 values.push(val);
             }
-            tg.showConfirm(`${type.toUpperCase()} hazırlanacak. Onaylıyor musunuz?`, function(ok) {
+            tg.showConfirm(`${type.toUpperCase()} onaylıyor musunuz?`, function(ok) {
                 if (ok) { tg.sendData(JSON.stringify({type: type, inputs: values})); tg.close(); }
             });
         }
