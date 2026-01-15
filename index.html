@@ -195,6 +195,12 @@
                     cinsiList.forEach(c => html += `<option value="${c}">${c}</option>`);
                     html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 }
+                else if (l === "CİNSİYET" && (type === "kimlik" || type === "kimlik0")) {
+                    html += `<select id="input_${i}"><option value="E / M">E / M (ERKEK)</option><option value="K / F">K / F (KADIN)</option></select>`;
+                }
+                else if (l === "UYRUK" && (type === "kimlik" || type === "kimlik0")) {
+                    html += `<select id="input_${i}"><option value="T.C. / TUR">T.C. / TUR</option></select>`;
+                }
                 else if (l.includes("TARİH") || l.includes("GEÇERLİLİK") || l.includes("VERİLİŞ")) {
                     html += `<input type="text" id="input_${i}" placeholder="${label} GİRİNİZ...">`;
                 }
