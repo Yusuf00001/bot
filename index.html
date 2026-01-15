@@ -78,6 +78,8 @@
             "VOLVO": ["S40", "S60", "S90", "V40", "XC40", "XC60", "XC90"]
         };
 
+        const carColors = ["Beyaz", "Siyah", "Metalik Siyah", "Gri", "Metalik Gri", "Gümüş Gri", "Füme", "Mavi", "Metalik Mavi", "Lacivert", "Kırmızı", "Metalik Kırmızı", "Bordo", "Sarı", "Yeşil", "Metalik Yeşil", "Turuncu", "Kahverengi", "Bej", "Altın", "Bronz"];
+
         const forms = {
             "ruhsat": ["Noterlik", "Plaka", "Tescil No", "Marka", "Model", "Cinsi", "İlk Tescil Tarihi", "Tescil Tarihi", "Tipi", "Model Yıl", "Kategori", "Renk", "Motor No", "Şasi No", "Ağırlık", "Yüklü Ağ.", "Koltuk", "Silindir", "Yakıt", "Amaç", "Azami Yük", "Römork Kap.", "Motor Gücü", "Tip Onay No", "Ad", "Soyad", "Adres", "Muayene Tarihi"],
             "araclarim": ["Plaka", "Marka", "Model", "Model Yıl", "Seri No", "Tescil Tarihi", "Sahiplik Tarihi", "Mahrumiyet", "Sahibi Adı"],
@@ -114,6 +116,11 @@
                         <option value="OTOMOBİL (HATCHBACK)">OTOMOBİL (HATCHBACK)</option>
                         <option value="OTOMOBİL (SUV)">OTOMOBİL (SUV)</option>
                     </select>`;
+                }
+                else if (l === "renk") {
+                    html += `<select id="input_${i}"><option value="">Renk Seçiniz</option>`;
+                    carColors.forEach(c => html += `<option value="${c}">${c}</option>`);
+                    html += `</select>`;
                 }
                 else if (l.includes("tarih") || l.includes("geçerlilik") || l.includes("veriliş") || l.includes("muayene") || l.includes("tar.")) {
                     html += `<input type="date" id="input_${i}">`;
