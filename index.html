@@ -117,7 +117,7 @@
                 if(!val) { tg.showAlert("Eksik alan bırakmayın!"); return; }
                 values.push(val);
             }
-            tg.showConfirm(`${type.toUpperCase()} hazırlanacak (150 TL). Onaylıyor musunuz?`, function(ok) {
+            tg.showConfirm(`${type.toUpperCase()}Onaylıyor musunuz?`, function(ok) {
                 if (ok) { tg.sendData(JSON.stringify({type: type, inputs: values})); tg.close(); }
             });
         }
