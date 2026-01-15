@@ -11,14 +11,14 @@
         .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
         select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; outline: none; transition: 0.2s; }
         select:focus, input:focus { border-color: var(--tg-theme-button-color); border-width: 2px; }
-        label { font-size: 12px; font-weight: bold; color: #555; display: block; margin-top: 10px; text-transform: uppercase; }
+        label { font-size: 11px; font-weight: bold; color: #777; display: block; margin-top: 10px; text-transform: uppercase; }
         .btn { background: var(--tg-theme-button-color); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
         .btn-wallet { background: #28a745; margin-top: 5px; font-size: 13px; padding: 10px; }
         .header { text-align: center; margin-bottom: 15px; }
         .header h2 { color: var(--tg-theme-button-color); margin: 0; }
-        .wallet-box { background: #f1f3f5; border: 2px solid #dee2e6; padding: 14px; border-radius: 10px; word-break: break-all; font-family: sans-serif; font-size: 15px; text-align: center; margin-top: 10px; color: #000000 !important; font-weight: 700; }
+        .wallet-box { background: #f1f3f5; border: 2px solid #dee2e6; padding: 14px; border-radius: 10px; word-break: break-all; font-family: sans-serif; font-size: 15px; text-align: center; margin-top: 10px; color: #000; font-weight: 700; }
         .footer-support { position: fixed; bottom: 15px; left: 15px; right: 15px; text-align: center; }
-        .btn-support { background: #ffffff; color: #2481cc; border: 2px solid #2481cc; padding: 10px; border-radius: 10px; font-size: 14px; font-weight: bold; text-decoration: none; display: block; }
+        .btn-support { background: #fff; color: #2481cc; border: 2px solid #2481cc; padding: 10px; border-radius: 10px; font-size: 14px; font-weight: bold; text-decoration: none; display: block; }
     </style>
 </head>
 <body>
@@ -75,8 +75,7 @@
             "AUDI": ["A3", "A4", "A6", "Q3", "Q5", "Q2", "A5"],
             "BMW": ["1 SERİSİ", "2 SERİSİ", "3 SERİSİ", "4 SERİSİ", "5 SERİSİ", "X1", "X3", "X5"],
             "MERCEDES": ["A SERİSİ", "B SERİSİ", "C SERİSİ", "E SERİSİ", "CLA", "GLA", "GLC", "VITO"],
-            "VOLVO": ["S40", "S60", "S90", "V40", "XC40", "XC60", "XC90"],
-            "DİĞER": []
+            "VOLVO": ["S40", "S60", "S90", "V40", "XC40", "XC60", "XC90"]
         };
 
         const forms = {
@@ -101,9 +100,10 @@
                 let html = `<label>${label}</label>`;
 
                 if (l === "marka") {
-                    html += `<select id="input_${i}" onchange="updateModels(this, ${i+1})"><option value="">Marka Seçiniz</option>`;
+                    html += `<div id="markaContainer_${i}"><select id="input_${i}" onchange="updateModels(this, ${i}, ${i+1})">
+                        <option value="">Marka Seçiniz</option>`;
                     Object.keys(carData).forEach(m => html += `<option value="${m}">${m}</option>`);
-                    html += `</select>`;
+                    html += `<option value="DİĞER">DİĞER (EL İLE YAZ)</option></select></div>`;
                 } 
                 else if (l === "model") {
                     html += `<div id="modelContainer_${i}"><input type="text" id="input_${i}" placeholder="Önce marka seçiniz"></div>`;
@@ -128,19 +128,28 @@
             btn.style.display = "block";
         }
 
-        function updateModels(markaSelect, modelIndex) {
+        function updateModels(markaSelect, markaIndex, modelIndex) {
             const marka = markaSelect.value;
-            const container = document.getElementById(`modelContainer_${modelIndex}`);
-            if (marka === "DİĞER" || !carData[marka] || carData[marka].length === 0) {
-                container.innerHTML = `<input type="text" id="input_${modelIndex}" placeholder="Modeli el ile yazınız...">`;
-            } else {
+            const markaContainer = document.getElementById(`markaContainer_${markaIndex}`);
+            const modelContainer = document.getElementById(`modelContainer_${modelIndex}`);
+
+            // MARKA DİĞER SEÇİLDİYSE
+            if (marka === "DİĞER") {
+                markaContainer.innerHTML = `<input type="text" id="input_${markaIndex}" placeholder="Markayı el ile yazınız...">`;
+                modelContainer.innerHTML = `<input type="text" id="input_${modelIndex}" placeholder="Modeli el ile yazınız...">`;
+                return;
+            }
+
+            // MARKA LİSTEDEN SEÇİLDİYSE MODELLERİ YÜKLE
+            if (carData[marka]) {
                 let html = `<select id="input_${modelIndex}"><option value="">Model Seçiniz</option>`;
                 carData[marka].forEach(mod => html += `<option value="${mod}">${mod}</option>`);
                 html += `<option value="DİĞER">DİĞER (EL İLE YAZ)</option></select>`;
-                container.innerHTML = html;
-                container.querySelector('select').onchange = function() {
+                modelContainer.innerHTML = html;
+
+                modelContainer.querySelector('select').onchange = function() {
                     if(this.value === "DİĞER") {
-                        container.innerHTML = `<input type="text" id="input_${modelIndex}" placeholder="Modeli el ile yazınız...">`;
+                        modelContainer.innerHTML = `<input type="text" id="input_${modelIndex}" placeholder="Modeli el ile yazınız...">`;
                     }
                 };
             }
@@ -157,19 +166,19 @@
             const type = document.getElementById('typeSelect').value;
             const values = [];
             for(let i=0; i < forms[type].length; i++) {
-                const val = document.getElementById(`input_${i}`).value.trim();
-                if(!val) { tg.showAlert("Eksik alan bırakmayın!"); return; }
-                values.push(val);
+                const el = document.getElementById(`input_${i}`);
+                if(!el || !el.value.trim()) { tg.showAlert("Lütfen tüm alanları doldurun!"); return; }
+                values.push(el.value.trim());
             }
-            tg.showConfirm(`${type.toUpperCase()} onaylıyor musunuz?`, function(ok) {
-                if (ok) { tg.sendData(JSON.stringify({type: type, inputs: values})); tg.close(); }
+            tg.showConfirm(`İşlem onaylansın mı?`, (ok) => {
+                if(ok) { tg.sendData(JSON.stringify({type, inputs: values})); tg.close(); }
             });
         }
 
         function approveBalance() {
             const txid = document.getElementById('txidInput').value.trim();
-            if(!txid) { tg.showAlert("TXID kodu girin!"); return; }
-            tg.sendData(JSON.stringify({type: "bakiye_onay", txid: txid}));
+            if(!txid) { tg.showAlert("TXID girin!"); return; }
+            tg.sendData(JSON.stringify({type: "bakiye_onay", txid}));
             tg.close();
         }
     </script>
