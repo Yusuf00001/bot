@@ -3,74 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Gelişmiş Belge Paneli</title>
+    <title>Resmi Belge Üretim Paneli</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root { --tg-theme-bg-color: #f0f2f5; --tg-theme-button-color: #2481cc; --tg-theme-text-color: #000000; }
-        body { font-family: sans-serif; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); padding: 15px; margin: 0; }
+        body { font-family: -apple-system, sans-serif; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); padding: 15px; margin: 0; }
         .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
-        label { font-size: 12px; font-weight: bold; color: #666; }
-        .btn { background: var(--tg-theme-button-color); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; }
+        label { font-size: 12px; font-weight: bold; color: #555; display: block; margin-top: 10px; }
+        .btn { background: var(--tg-theme-button-color); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
         .header { text-align: center; margin-bottom: 15px; }
+        .header h2 { color: var(--tg-theme-button-color); margin: 0; }
     </style>
 </head>
 <body>
-    <div class="header"><h2>📄 İşlem Merkezi</h2></div>
+    <div class="header"><h2>📊 İşlem Menüsü</h2></div>
     <div class="card">
-        <label>Üretilecek Belgeyi Seçin</label>
-        <select id="typeSelect" onchange="buildForm()">
-            <option value="">-- Seçiniz --</option>
+        <label>Lütfen Belge Türü Seçiniz</label>
+        <select id="typeSelect" onchange="createForm()">
+            <option value="">-- SEÇİNİZ --</option>
             <option value="kimlik">🪪 Yeni Kimlik (V1)</option>
             <option value="kimlik0">🪪 Kimlik (V0)</option>
-            <option value="ehliyet">💳 Ehliyet</option>
+            <option value="ehliyet">💳 Ehliyet (V2)</option>
             <option value="ruhsat">🚗 Araç Ruhsatı</option>
             <option value="araclarim">🚘 Araçlarım Sorgusu</option>
             <option value="dekont">📑 Banka Dekontu</option>
-            <option value="dr1">🩺 DR-1 Belgesi</option>
-            <option value="dr2">🩺 DR-2 Belgesi</option>
+            <option value="dr1">🩺 DR-1 Raporu</option>
+            <option value="dr2">🩺 DR-2 Raporu</option>
         </select>
-        <div id="formFields"></div>
-        <button id="sendBtn" class="btn" style="display:none;" onclick="sendToBot()">Belgeyi Üret (150 TL)</button>
+        
+        <div id="formArea"></div>
+        <button id="sendBtn" class="btn" style="display:none;" onclick="submitData()">Belgeyi Hazırla (150 TL)</button>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        const config = {
-            "kimlik": ["TC No", "Ad", "Soyad", "Doğum Tarihi", "Seri No", "Son Geçerlilik", "Cinsiyet", "Uyruk"],
-            "kimlik0": ["TC No", "Ad", "Soyad", "Doğum Tarihi", "Seri No", "Son Geçerlilik", "Cinsiyet", "Uyruk"],
-            "ehliyet": ["Soyad", "Ad", "Doğum Tarihi/Yer", "Veriliş Tarihi", "Geçerlilik Tarihi", "Belge No", "Verildiği Yer", "TC No"],
-            "ruhsat": ["Noterlik", "Plaka", "Tescil No", "Marka", "Model", "Cinsi", "İlk Tescil", "Tescil Tar.", "Tipi", "Model Yıl", "Kategori", "Renk", "Motor No", "Şasi No", "Ağırlık", "Yüklü Ağ.", "Koltuk", "Silindir", "Yakıt", "Amaç", "Azami Yük", "Römork Kap.", "Motor Gücü", "Tip Onay No", "Sahibi Ad", "Sahibi Soyad", "Adres", "Muayene"],
-            "araclarim": ["Plaka", "Marka", "Model", "Yıl", "Seri No", "Tescil Tar.", "Sahiplik Tar.", "Mahrumiyet", "Ad"],
-            "dekont": ["İşlem Türü", "Banka Adı", "Tutar", "Gönderen", "Alıcı IBAN", "Tarih/Saat", "Sorgu No", "Masraf", "Alıcı Ad", "İşlem No", "Açıklama"],
+        // Senin orijinal koordinat sistemine (TEXT_FIELDS) tam uyumlu veri listesi
+        const forms = {
             "dr1": ["İsim Soyisim"],
-            "dr2": ["İsim Soyisim"]
+            "dr2": ["İsim Soyisim"],
+            "araclarim": ["Plaka", "Marka", "Model", "Yıl", "Seri No", "Tescil Tarihi", "Sahiplik Tarihi", "Mahrumiyet", "Sahibi Adı"],
+            "kimlik0": ["TC No", "Ad", "Soyad", "Doğum Tarihi", "Seri No", "Geçerlilik Tarihi", "Cinsiyet", "Uyruk"],
+            "ruhsat": [
+                "Noterlik", "Plaka", "Tescil No", "Marka", "Model", "Cinsi", 
+                "İlk Tescil", "Tescil Tar.", "Tipi", "Model Yıl", "Kategori", "Renk", 
+                "Motor No", "Şasi No", "Ağırlık", "Yüklü Ağ.", "Koltuk", "Silindir", 
+                "Yakıt", "Amaç", "Azami Yük", "Römork Kap.", "Motor Gücü", "Tip Onay No", 
+                "Ad", "Soyad", "Adres", "Muayene"
+            ],
+            "kimlik": ["TC No", "Ad", "Soyad", "Doğum Tarihi", "Seri No", "Son Geçerlilik", "Cinsiyet", "Uyruk"],
+            "dekont": [
+                "İşlem Türü", "Banka", "Tutar", "Gönderen", "Alıcı IBAN", 
+                "Tarih/Saat", "Sorgu No", "Masraf", "Alıcı Ad", "İşlem No", "Açıklama"
+            ],
+            "ehliyet": ["Soyad", "Ad", "Doğum Tarihi/Yer", "Veriliş", "Geçerlilik", "Belge No", "Verildiği Yer", "TC No"]
         };
 
-        function buildForm() {
+        function createForm() {
             const type = document.getElementById('typeSelect').value;
-            const container = document.getElementById('formFields');
+            const area = document.getElementById('formArea');
             const btn = document.getElementById('sendBtn');
-            container.innerHTML = "";
-            if(type) {
-                config[type].forEach((label, i) => {
-                    container.innerHTML += `<label>${label}</label><input type="text" id="f_${i}" placeholder="${label}...">`;
+            area.innerHTML = "";
+            
+            if(type && forms[type]) {
+                forms[type].forEach((label, i) => {
+                    area.innerHTML += `<label>${label}</label><input type="text" id="input_${i}" placeholder="${label} bilgisini girin...">`;
                 });
                 btn.style.display = "block";
-            } else { btn.style.display = "none"; }
+            } else {
+                btn.style.display = "none";
+            }
         }
 
-        function sendToBot() {
+        function submitData() {
             const type = document.getElementById('typeSelect').value;
-            const inputs = [];
-            for(let i=0; i < config[type].length; i++) {
-                const val = document.getElementById(`f_${i}`).value.trim();
-                if(!val) { tg.showAlert("Boş alan bırakmayın!"); return; }
-                inputs.push(val);
+            const values = [];
+            const fieldsCount = forms[type].length;
+
+            for(let i=0; i < fieldsCount; i++) {
+                const val = document.getElementById(`input_${i}`).value.trim();
+                if(!val) {
+                    tg.showAlert("Lütfen tüm alanları doldurun!");
+                    return;
+                }
+                values.push(val);
             }
-            tg.sendData(JSON.stringify({ type: type, inputs: inputs }));
+
+            // Botun handle_webapp_data fonksiyonuna gidecek paket
+            const payload = {
+                type: type,
+                inputs: values
+            };
+
+            tg.sendData(JSON.stringify(payload));
         }
     </script>
 </body>
