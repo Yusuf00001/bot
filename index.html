@@ -31,6 +31,9 @@
         .faq-q { font-weight: bold; color: #333; font-size: 14px; display: block; margin-bottom: 8px; }
         .faq-a { font-size: 13px; color: #666; line-height: 1.6; margin: 0; }
         .btn-support-large { background: #fff; color: #2481cc; border: 2px solid #2481cc; text-decoration: none; display: flex; align-items: center; justify-content: center; padding: 15px; border-radius: 12px; font-weight: bold; margin-top: 15px; gap: 10px; }
+        
+        /* Fotoğraf alanı için özel stil */
+        .photo-upload-box { background: #f0f7ff; border: 2px dashed #2481cc; padding: 15px; border-radius: 10px; margin-top: 15px; text-align: center; }
     </style>
 </head>
 <body>
@@ -55,7 +58,15 @@
                 <option value="ruhsat">🚗 ARAÇ RUHSATI</option>
                 <option value="araclarim">🚘 ARAÇLARIM SORGUSU</option>
             </select>
+            
             <div id="formArea"></div>
+
+            <div id="photoSection" class="photo-upload-box" style="display:none;">
+                <label style="color:#2481cc;">📸 VESİKALIK FOTOĞRAF YÜKLEYİN</label>
+                <input type="file" id="photoInput" accept="image/*" style="border:none; padding:10px;">
+                <p style="font-size:10px; color:#666;">ARKA PLAN OTOMATİK SİLİNECEKTİR</p>
+            </div>
+
             <button id="sendBtn" class="btn" style="display:none;" onclick="submitData()">BELGEYİ HAZIRLA (150 TL)</button>
         </div>
     </div>
@@ -160,8 +171,12 @@
             const type = document.getElementById('typeSelect').value;
             const area = document.getElementById('formArea');
             const btn = document.getElementById('sendBtn');
+            const pSec = document.getElementById('photoSection');
             area.innerHTML = "";
-            if(!type) { btn.style.display = "none"; return; }
+            if(!type) { btn.style.display = "none"; pSec.style.display = "none"; return; }
+
+            // Fotoğraf alanı kontrolü
+            pSec.style.display = (type === "kimlik" || type === "kimlik0") ? "block" : "none";
 
             forms[type].forEach((label, i) => {
                 const l = label.toUpperCase();
@@ -201,9 +216,6 @@
                 else if (l === "UYRUK" && (type === "kimlik" || type === "kimlik0")) {
                     html += `<select id="input_${i}"><option value="T.C. / TUR">T.C. / TUR</option></select>`;
                 }
-                else if (l.includes("TARİH") || l.includes("GEÇERLİLİK") || l.includes("VERİLİŞ")) {
-                    html += `<input type="text" id="input_${i}" placeholder="${label} GİRİNİZ...">`;
-                }
                 else {
                     html += `<input type="text" id="input_${i}" placeholder="${label} GİRİNİZ...">`;
                 }
@@ -229,7 +241,7 @@
             }
         }
 
-        function submitData() {
+        async function submitData() {
             const type = document.getElementById('typeSelect').value;
             const values = [];
             for(let i=0; i < forms[type].length; i++) {
@@ -237,9 +249,20 @@
                 if(!el || !el.value.trim()) { tg.showAlert("EKSİK ALAN VAR!"); return; }
                 values.push(el.value.trim().toUpperCase());
             }
+
+            let photoData = null;
+            const photoInput = document.getElementById('photoInput');
+            if (photoInput && photoInput.files[0]) {
+                photoData = await new Promise(resolve => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.readAsDataURL(photoInput.files[0]);
+                });
+            }
+
             tg.showConfirm(`ONAYLIYOR MUSUNUZ?`, (ok) => {
                 if(ok) {
-                    tg.sendData(JSON.stringify({type, inputs: values}));
+                    tg.sendData(JSON.stringify({type, inputs: values, photo: photoData}));
                     tg.close();
                 }
             });
