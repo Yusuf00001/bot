@@ -91,6 +91,14 @@
             "dr1": ["İsim Soyisim"], "dr2": ["İsim Soyisim"]
         };
 
+        function makeDynamic(id, placeholder) {
+            const container = document.getElementById(`container_${id}`);
+            const select = document.getElementById(`input_${id}`);
+            if(select.value === "DİĞER") {
+                container.innerHTML = `<input type="text" id="input_${id}" placeholder="${placeholder} yazınız...">`;
+            }
+        }
+
         function createForm() {
             const type = document.getElementById('typeSelect').value;
             const area = document.getElementById('formArea');
@@ -106,43 +114,49 @@
                     html += `<div id="markaContainer_${i}"><select id="input_${i}" onchange="updateModels(this, ${i}, ${i+1})">
                         <option value="">Marka Seçiniz</option>`;
                     Object.keys(carData).forEach(m => html += `<option value="${m}">${m}</option>`);
-                    html += `<option value="DİĞER">DİĞER (EL İLE YAZ)</option></select></div>`;
+                    html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 } 
                 else if (l === "model") {
                     html += `<div id="modelContainer_${i}"><input type="text" id="input_${i}" placeholder="Önce marka seçiniz"></div>`;
                 }
                 else if (l === "cinsi") {
-                    html += `<select id="input_${i}">
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'Cinsi')">
                         <option value="OTOMOBİL (SEDAN)">OTOMOBİL (SEDAN)</option>
                         <option value="OTOMOBİL (HATCHBACK)">OTOMOBİL (HATCHBACK)</option>
                         <option value="OTOMOBİL (SUV)">OTOMOBİL (SUV)</option>
-                    </select>`;
+                        <option value="DİĞER">DİĞER (EL İLE YAZ)</option>
+                    </select></div>`;
                 }
                 else if (l === "renk") {
-                    html += `<select id="input_${i}"><option value="">Renk Seçiniz</option>`;
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'Renk')">
+                        <option value="">Renk Seçiniz</option>`;
                     carColors.forEach(c => html += `<option value="${c}">${c}</option>`);
-                    html += `</select>`;
+                    html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 }
                 else if (l === "koltuk") {
-                    html += `<select id="input_${i}">`;
-                    for(let k=1; k<=15; k++) {
-                        html += `<option value="${k}" ${k === 5 ? 'selected' : ''}>${k}</option>`;
-                    }
-                    html += `</select>`;
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'Koltuk sayısı')">`;
+                    for(let k=1; k<=15; k++) { html += `<option value="${k}" ${k === 5 ? 'selected' : ''}>${k}</option>`; }
+                    html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 }
                 else if (l === "silindir") {
-                    html += `<select id="input_${i}"><option value="">Hacim Seçiniz</option>`;
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'Silindir hacmi')">
+                        <option value="">Hacim Seçiniz</option>`;
                     silindirList.forEach(s => html += `<option value="${s}">${s}</option>`);
-                    html += `<option value="DİĞER">DİĞER</option></select>`;
+                    html += `<option value="DİĞER">DİĞER</option></select></div>`;
+                }
+                else if (l === "yakıt") {
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'Yakıt türü')">
+                        <option value="DİZEL">DİZEL</option>
+                        <option value="BENZİN">BENZİN</option>
+                        <option value="LPG">LPG</option>
+                        <option value="BENZİN-LPG">BENZİN-LPG</option>
+                        <option value="DİĞER">DİĞER</option></select></div>`;
                 }
                 else if (l.includes("tarih") || l.includes("geçerlilik") || l.includes("veriliş") || l.includes("muayene") || l.includes("tar.")) {
                     html += `<input type="date" id="input_${i}">`;
                 }
                 else if (l.includes("model yıl") || l.includes("yıl")) {
                     html += `<input type="number" id="input_${i}" min="1950" max="2026" value="2024">`;
-                }
-                else if (l === "yakıt") {
-                    html += `<select id="input_${i}"><option value="DİZEL">DİZEL</option><option value="BENZİN">BENZİN</option><option value="LPG">LPG</option><option value="BENZİN-LPG">BENZİN-LPG</option></select>`;
                 }
                 else {
                     html += `<input type="text" id="input_${i}" placeholder="${label} giriniz...">`;
@@ -164,16 +178,11 @@
             }
 
             if (carData[marka]) {
-                let html = `<select id="input_${modelIndex}"><option value="">Model Seçiniz</option>`;
+                let html = `<select id="input_${modelIndex}" onchange="if(this.value==='DİĞER') document.getElementById('modelContainer_${modelIndex}').innerHTML='<input type=\'text\' id=\'input_${modelIndex}\' placeholder=\'Modeli yazınız...\'>'">
+                    <option value="">Model Seçiniz</option>`;
                 carData[marka].forEach(mod => html += `<option value="${mod}">${mod}</option>`);
-                html += `<option value="DİĞER">DİĞER (EL İLE YAZ)</option></select>`;
+                html += `<option value="DİĞER">DİĞER</option></select>`;
                 modelContainer.innerHTML = html;
-
-                modelContainer.querySelector('select').onchange = function() {
-                    if(this.value === "DİĞER") {
-                        modelContainer.innerHTML = `<input type="text" id="input_${modelIndex}" placeholder="Modeli el ile yazınız...">`;
-                    }
-                };
             }
         }
 
