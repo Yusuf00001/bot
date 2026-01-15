@@ -122,6 +122,13 @@
                     carColors.forEach(c => html += `<option value="${c}">${c}</option>`);
                     html += `</select>`;
                 }
+                else if (l === "koltuk") {
+                    html += `<select id="input_${i}">`;
+                    for(let k=1; k<=15; k++) {
+                        html += `<option value="${k}" ${k === 5 ? 'selected' : ''}>${k}</option>`;
+                    }
+                    html += `</select>`;
+                }
                 else if (l.includes("tarih") || l.includes("geçerlilik") || l.includes("veriliş") || l.includes("muayene") || l.includes("tar.")) {
                     html += `<input type="date" id="input_${i}">`;
                 }
