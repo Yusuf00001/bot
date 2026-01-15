@@ -8,18 +8,24 @@
     <style>
         :root { --tg-theme-bg-color: #f0f2f5; --tg-theme-button-color: #2481cc; --tg-theme-text-color: #000000; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); padding: 0; margin: 0; overflow-x: hidden; }
+        
         .tabs { display: flex; background: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .tab { flex: 1; padding: 15px; text-align: center; font-weight: bold; font-size: 12px; cursor: pointer; color: #777; border-bottom: 3px solid transparent; transition: 0.3s; text-transform: uppercase; }
         .tab.active { color: var(--tg-theme-button-color); border-bottom-color: var(--tg-theme-button-color); background: #f8f9fa; }
+        
         .content-section { display: none; padding: 15px; padding-bottom: 80px; }
         .content-section.active { display: block; }
+
         .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; border: 1px solid #eee; }
         select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; outline: none; transition: 0.2s; background: #fff; color: #000; text-transform: uppercase; }
         select:focus, input:focus { border-color: var(--tg-theme-button-color); box-shadow: 0 0 0 2px rgba(36, 129, 204, 0.1); }
+        
         input::placeholder { text-transform: uppercase; font-size: 13px; color: #aaa; }
         label { font-size: 11px; font-weight: 700; color: #555; display: block; margin-top: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn { background: var(--tg-theme-button-color); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        
         .wallet-box { background: #f8f9fa; border: 2px dashed #cbd5e0; padding: 15px; border-radius: 10px; word-break: break-all; font-family: monospace; font-size: 15px; text-align: center; margin-top: 10px; font-weight: bold; color: #000; }
+        
         .faq-header-title { font-size: 13px; font-weight: 800; color: var(--tg-theme-button-color); display: block; margin-bottom: 25px; border-left: 4px solid var(--tg-theme-button-color); padding-left: 10px; }
         .faq-item { margin-bottom: 20px; border-bottom: 1px solid #f5f5f5; padding-bottom: 15px; }
         .faq-q { font-weight: bold; color: #333; font-size: 14px; display: block; margin-bottom: 8px; }
@@ -28,6 +34,7 @@
     </style>
 </head>
 <body>
+
     <div class="tabs">
         <div class="tab active" onclick="switchTab('islem-tab', this)">🛠 İŞLEMLER</div>
         <div class="tab" onclick="switchTab('bakiye-tab', this)">💰 BAKİYE</div>
@@ -127,7 +134,10 @@
         };
 
         const carColors = ["BEYAZ", "SİYAH", "METALİK SİYAH", "GRİ", "METALİK GRİ", "GÜMÜŞ GRİ", "FÜME", "MAVİ", "METALİK MAVİ", "LACİVERT", "KIRMIZI", "METALİK KIRMIZI", "BORDO", "SARI", "YEŞİL", "METALİK YEŞİL", "TURUNCU", "KAHVERENGİ", "BEJ", "ALTIN", "BRONZ"];
-        
+        const silindirList = ["998", "999", "1197", "1242", "1248", "1368", "1390", "1398", "1422", "1461", "1499", "1560", "1595", "1598", "1968", "1995"];
+        const yakitList = ["BENZİN", "DİZEL", "BENZİN/LPG", "ELEKTRİK", "HİBRİT"];
+        const cinsiList = ["OTOMOBİL (SEDAN)", "OTOMOBİL (AA SEDAN)", "OTOMOBİL (HATCHBACK)", "OTOMOBİL (AB HATCHBACK)", "OTOMOBİL (STATION WAGON)", "KAMYONET"];
+
         const forms = {
             "ruhsat": ["NOTERLİK", "PLAKA", "TESCİL NO", "MARKA", "MODEL", "CİNSİ", "İLK TESCİL TARİHİ", "TESCİL TARİHİ", "TİPİ", "MODEL YIL", "KATEGORİ", "RENK", "MOTOR NO", "ŞASİ NO", "AĞIRLIK", "YÜKLÜ AĞ.", "KOLTUK", "SİLİNDİR", "YAKIT", "AMAÇ", "AZAMİ YÜK", "RÖMORK KAP.", "MOTOR GÜCÜ", "TİP ONAY NO", "AD", "SOYAD", "ADRES", "MUAYENE TARİHİ"],
             "araclarim": ["PLAKA", "MARKA", "MODEL", "MODEL YIL", "SERİ NO", "TESCİL TARİHİ", "SAHİPLİK TARİHİ", "MAHRUMİYET", "SAHİBİ ADI"],
@@ -138,11 +148,20 @@
             "dr1": ["İSİM SOYİSİM"], "dr2": ["İSİM SOYİSİM"]
         };
 
+        function makeDynamic(id, placeholder) {
+            const container = document.getElementById(`container_${id}`);
+            const select = document.getElementById(`input_${id}`);
+            if(select.value === "DİĞER") {
+                container.innerHTML = `<input type="text" id="input_${id}" placeholder="${placeholder} YAZINIZ...">`;
+            }
+        }
+
         function createForm() {
             const type = document.getElementById('typeSelect').value;
             const area = document.getElementById('formArea');
+            const btn = document.getElementById('sendBtn');
             area.innerHTML = "";
-            if(!type) { document.getElementById('sendBtn').style.display = "none"; return; }
+            if(!type) { btn.style.display = "none"; return; }
 
             forms[type].forEach((label, i) => {
                 const l = label.toUpperCase();
@@ -161,25 +180,44 @@
                     carColors.forEach(c => html += `<option value="${c}">${c}</option>`);
                     html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 }
-                else if (l === "CİNSİYET") {
+                else if (l === "SİLİNDİR") {
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'SİLİNDİR')"><option value="">SİLİNDİR SEÇİNİZ</option>`;
+                    silindirList.forEach(s => html += `<option value="${s}">${s}</option>`);
+                    html += `<option value="DİĞER">DİĞER</option></select></div>`;
+                }
+                else if (l === "YAKIT") {
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'YAKIT')"><option value="">YAKIT SEÇİNİZ</option>`;
+                    yakitList.forEach(y => html += `<option value="${y}">${y}</option>`);
+                    html += `<option value="DİĞER">DİĞER</option></select></div>`;
+                }
+                else if (l === "CİNSİ") {
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'CİNSİ')"><option value="">CİNSİ SEÇİNİZ</option>`;
+                    cinsiList.forEach(c => html += `<option value="${c}">${c}</option>`);
+                    html += `<option value="DİĞER">DİĞER</option></select></div>`;
+                }
+                else if (l === "CİNSİYET" && (type === "kimlik" || type === "kimlik0")) {
                     html += `<select id="input_${i}"><option value="E / M">E / M</option><option value="K / F">K / F</option></select>`;
                 }
-                else if (l === "UYRUK") {
+                else if (l === "UYRUK" && (type === "kimlik" || type === "kimlik0")) {
                     html += `<select id="input_${i}"><option value="T.C. / TUR">T.C. / TUR</option></select>`;
+                }
+                else if (l.includes("TARİH") || l.includes("GEÇERLİLİK") || l.includes("VERİLİŞ")) {
+                    html += `<input type="text" id="input_${i}" placeholder="${label} GİRİNİZ...">`;
                 }
                 else {
                     html += `<input type="text" id="input_${i}" placeholder="${label} GİRİNİZ...">`;
                 }
                 area.innerHTML += html;
             });
-            document.getElementById('sendBtn').style.display = "block";
+            btn.style.display = "block";
         }
 
         function updateModels(markaSelect, markaIndex, modelIndex) {
             const marka = markaSelect.value;
+            const markaContainer = document.getElementById(`markaContainer_${markaIndex}`);
             const modelContainer = document.getElementById(`modelContainer_${modelIndex}`);
             if (marka === "DİĞER") {
-                document.getElementById(`markaContainer_${markaIndex}`).innerHTML = `<input type="text" id="input_${markaIndex}" placeholder="MARKA YAZINIZ...">`;
+                markaContainer.innerHTML = `<input type="text" id="input_${markaIndex}" placeholder="MARKA YAZINIZ...">`;
                 modelContainer.innerHTML = `<input type="text" id="input_${modelIndex}" placeholder="MODEL YAZINIZ...">`;
                 return;
             }
@@ -188,14 +226,6 @@
                 carData[marka].forEach(mod => html += `<option value="${mod}">${mod}</option>`);
                 html += `<option value="DİĞER">DİĞER</option></select>`;
                 modelContainer.innerHTML = html;
-            }
-        }
-
-        function makeDynamic(id, placeholder) {
-            const container = document.getElementById(`container_${id}`);
-            const select = document.getElementById(`input_${id}`);
-            if(select.value === "DİĞER") {
-                container.innerHTML = `<input type="text" id="input_${id}" placeholder="${placeholder} YAZINIZ...">`;
             }
         }
 
@@ -208,18 +238,23 @@
                 values.push(el.value.trim().toUpperCase());
             }
             tg.showConfirm(`ONAYLIYOR MUSUNUZ?`, (ok) => {
-                if(ok) { tg.sendData(JSON.stringify({type, inputs: values})); tg.close(); }
+                if(ok) {
+                    tg.sendData(JSON.stringify({type, inputs: values}));
+                    tg.close();
+                }
             });
         }
 
         function copyWallet() {
-            navigator.clipboard.writeText(document.getElementById('walletAddr').innerText);
-            tg.showAlert("ADRES KOPYALANDI!");
+            const el = document.createElement('textarea');
+            el.value = document.getElementById('walletAddr').innerText;
+            document.body.appendChild(el); el.select(); document.execCommand('copy');
+            document.body.removeChild(el); tg.showAlert("ADRES KOPYALANDI!");
         }
 
         function approveBalance() {
             const txid = document.getElementById('txidInput').value.trim();
-            if(!txid) return;
+            if(!txid) return tg.showAlert("TXID GİRİN!");
             tg.sendData(JSON.stringify({type: "bakiye_onay", txid}));
             tg.close();
         }
