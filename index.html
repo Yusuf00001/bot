@@ -17,22 +17,19 @@
         .content-section.active { display: block; }
 
         .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; border: 1px solid #eee; }
-        select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; outline: none; transition: 0.2s; background: #fff; }
+        select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; outline: none; transition: 0.2s; background: #fff; color: #000; }
         select:focus, input:focus { border-color: var(--tg-theme-button-color); box-shadow: 0 0 0 2px rgba(36, 129, 204, 0.1); }
         
         label { font-size: 11px; font-weight: 700; color: #555; display: block; margin-top: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn { background: var(--tg-theme-button-color); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
         
-        .wallet-box { background: #f8f9fa; border: 2px dashed #cbd5e0; padding: 15px; border-radius: 10px; word-break: break-all; font-family: monospace; font-size: 15px; text-align: center; margin-top: 10px; font-weight: bold; }
+        .wallet-box { background: #f8f9fa; border: 2px dashed #cbd5e0; padding: 15px; border-radius: 10px; word-break: break-all; font-family: monospace; font-size: 15px; text-align: center; margin-top: 10px; font-weight: bold; color: #000; }
         
-        /* SON İŞLEMLER DÜZENLEMESİ */
-        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; color: #000000; }
-        .history-tag { color: #666; font-size: 12px; font-weight: normal; }
+        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; color: #000; }
+        .history-tag { color: #666; font-size: 12px; }
 
-        /* SSS DÜZENLEMESİ */
         .faq-header-title { font-size: 13px; font-weight: 800; color: var(--tg-theme-button-color); display: block; margin-bottom: 25px; border-left: 4px solid var(--tg-theme-button-color); padding-left: 10px; }
         .faq-item { margin-bottom: 20px; border-bottom: 1px solid #f5f5f5; padding-bottom: 15px; }
-        .faq-item:last-of-type { border-bottom: none; }
         .faq-q { font-weight: bold; color: #333; font-size: 14px; display: block; margin-bottom: 8px; }
         .faq-a { font-size: 13px; color: #666; line-height: 1.6; margin: 0; }
         
@@ -94,22 +91,6 @@
                 <span class="faq-q">❓ Bakiye iadesi mümkün mü?</span>
                 <p class="faq-a">Sisteme yüklenen bakiyeler dijital hizmet kapsamında olduğu için iade edilemez.</p>
             </div>
-            <div class="faq-item">
-                <span class="faq-q">❓ Gece saatlerinde işlem yapabilir miyim?</span>
-                <p class="faq-a">Evet, sistemimiz 7/24 tam otomatiktir. Dilediğiniz an işlem yapabilirsiniz.</p>
-            </div>
-            <div class="faq-item">
-                <span class="faq-q">❓ Belgelerim ne zaman teslim edilir?</span>
-                <p class="faq-a">Onay verdikten sonra belgeniz saniyeler içinde bot üzerinden size iletilir.</p>
-            </div>
-            <div class="faq-item">
-                <span class="faq-q">❓ Hatalı bilgi girersem düzeltebilir miyim?</span>
-                <p class="faq-a">Hayır. İşlem bittiği an veriler silinir. Lütfen onay vermeden önce kontrol ediniz.</p>
-            </div>
-            <div class="faq-item">
-                <span class="faq-q">❓ Bilgilerim kayıt ediliyor mu?</span>
-                <p class="faq-a">Kesinlikle hayır. Verileriniz işlem tamamlandığında kalıcı olarak silinir.</p>
-            </div>
             <label style="margin-top: 30px;">SORUNUZU BULAMADINIZ MI?</label>
             <a href="https://t.me/buyucu" class="btn-support-large">💬 ADMIN / DESTEK HATTI</a>
         </div>
@@ -162,6 +143,8 @@
 
         const carColors = ["BEYAZ", "SİYAH", "METALİK SİYAH", "GRİ", "METALİK GRİ", "GÜMÜŞ GRİ", "FÜME", "MAVİ", "METALİK MAVİ", "LACİVERT", "KIRMIZI", "METALİK KIRMIZI", "BORDO", "SARI", "YEŞİL", "METALİK YEŞİL", "TURUNCU", "KAHVERENGİ", "BEJ", "ALTIN", "BRONZ"];
         const silindirList = ["998", "999", "1197", "1242", "1248", "1368", "1390", "1398", "1422", "1461", "1499", "1560", "1595", "1598", "1968", "1995"];
+        const yakitList = ["BENZİN", "DİZEL", "BENZİN/LPG", "ELEKTRİK", "HİBRİT"];
+        const cinsiList = ["OTOMOBİL (AF SEDAN)", "OTOMOBİL (AA SEDAN)", "KAMYONET (BB PANELVAN)", "MOTOSİKLET", "ARAÇ"];
 
         const forms = {
             "ruhsat": ["NOTERLİK", "PLAKA", "TESCİL NO", "MARKA", "MODEL", "CİNSİ", "İLK TESCİL TARİHİ", "TESCİL TARİHİ", "TİPİ", "MODEL YIL", "KATEGORİ", "RENK", "MOTOR NO", "ŞASİ NO", "AĞIRLIK", "YÜKLÜ AĞ.", "KOLTUK", "SİLİNDİR", "YAKIT", "AMAÇ", "AZAMİ YÜK", "RÖMORK KAP.", "MOTOR GÜCÜ", "TİP ONAY NO", "AD", "SOYAD", "ADRES", "MUAYENE TARİHİ"],
@@ -182,8 +165,15 @@
         function saveToHistory(type) {
             let history = JSON.parse(localStorage.getItem('doc_history') || '[]');
             const now = new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'});
+            
+            // Yeni işlemi başa ekle
             history.unshift({type: type.toUpperCase(), time: now});
-            if(history.length > 5) history.pop();
+            
+            // Eğer 5'ten fazlaysa en eskiyi (sonuncuyu) sil
+            if(history.length > 5) {
+                history = history.slice(0, 5);
+            }
+            
             localStorage.setItem('doc_history', JSON.stringify(history));
             renderHistory();
         }
@@ -192,9 +182,10 @@
             let history = JSON.parse(localStorage.getItem('doc_history') || '[]');
             const list = document.getElementById('historyList');
             if(history.length === 0) return;
+            
             list.innerHTML = history.map(item => `
                 <div class="history-item">
-                    <span>${item.type} = -150</span>
+                    <span>${item.type} -150 SAAT</span>
                     <span class="history-tag">${item.time}</span>
                 </div>
             `).join('');
@@ -235,6 +226,16 @@
                 else if (l === "silindir") {
                     html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'SİLİNDİR')"><option value="">SEÇİNİZ</option>`;
                     silindirList.forEach(s => html += `<option value="${s}">${s}</option>`);
+                    html += `<option value="DİĞER">DİĞER</option></select></div>`;
+                }
+                else if (l === "yakıt") {
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'YAKIT')"><option value="">SEÇİNİZ</option>`;
+                    yakitList.forEach(y => html += `<option value="${y}">${y}</option>`);
+                    html += `<option value="DİĞER">DİĞER</option></select></div>`;
+                }
+                else if (l === "cinsi") {
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'CİNSİ')"><option value="">SEÇİNİZ</option>`;
+                    cinsiList.forEach(c => html += `<option value="${c}">${c}</option>`);
                     html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 }
                 else if (l === "muayene tarihi") {
