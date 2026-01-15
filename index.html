@@ -31,10 +31,6 @@
         .faq-q { font-weight: bold; color: #333; font-size: 14px; display: block; margin-bottom: 8px; }
         .faq-a { font-size: 13px; color: #666; line-height: 1.6; margin: 0; }
         .btn-support-large { background: #fff; color: #2481cc; border: 2px solid #2481cc; text-decoration: none; display: flex; align-items: center; justify-content: center; padding: 15px; border-radius: 12px; font-weight: bold; margin-top: 15px; gap: 10px; }
-        
-        /* Hesap Silme Alanı Stili */
-        .danger-zone { border: 1px solid #ff4d4d !important; background: #fff5f5 !important; }
-        .btn-danger { background: #ff4d4d !important; }
     </style>
 </head>
 <body>
@@ -89,12 +85,6 @@
             <div class="faq-item"><span class="faq-q">❓ Aradığım belge türü listede yok?</span><p class="faq-a">Sürekli güncelleniyoruz. İstediğiniz şablon varsa lütfen bize iletin.</p></div>
             <label style="margin-top: 30px;">SORUNUZU BULAMADINIZ MI?</label>
             <a href="https://t.me/buyucu" class="btn-support-large">💬 ADMIN / DESTEK HATTI</a>
-        </div>
-
-        <div class="card danger-zone">
-            <label style="color: #ff4d4d;">HESAP YÖNETİMİ</label>
-            <p style="font-size: 12px; color: #666; margin: 10px 0;">Hesabınızı sildiğinizde mevcut bakiyeniz ve tüm işlem geçmişiniz kalıcı olarak temizlenir. Bu işlem geri alınamaz.</p>
-            <button class="btn btn-danger" onclick="deleteAccount()">HESABIMI KALICI OLARAK SİL</button>
         </div>
     </div>
 
@@ -211,9 +201,6 @@
                 else if (l === "UYRUK" && (type === "kimlik" || type === "kimlik0")) {
                     html += `<select id="input_${i}"><option value="T.C. / TUR">T.C. / TUR</option></select>`;
                 }
-                else if (l.includes("TARİH") || l.includes("GEÇERLİLİK") || l.includes("VERİLİŞ")) {
-                    html += `<input type="text" id="input_${i}" placeholder="${label} GİRİNİZ...">`;
-                }
                 else {
                     html += `<input type="text" id="input_${i}" placeholder="${label} GİRİNİZ...">`;
                 }
@@ -267,16 +254,6 @@
             if(!txid) return tg.showAlert("TXID GİRİN!");
             tg.sendData(JSON.stringify({type: "bakiye_onay", txid}));
             tg.close();
-        }
-
-        /* HESAP SİLME FONKSİYONU */
-        function deleteAccount() {
-            tg.showConfirm("Hesabınızı silmek istediğinize emin misiniz? Bu işlem geri alınamaz, bakiyeniz ve geçmişiniz silinir.", (ok) => {
-                if(ok) {
-                    tg.sendData(JSON.stringify({type: "hesap_silme_onay"}));
-                    tg.close();
-                }
-            });
         }
     </script>
 </body>
