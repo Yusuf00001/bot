@@ -40,7 +40,6 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Senin orijinal koordinat sistemine (TEXT_FIELDS) tam uyumlu veri listesi
         const forms = {
             "dr1": ["İsim Soyisim"],
             "dr2": ["İsim Soyisim"],
@@ -91,13 +90,17 @@
                 values.push(val);
             }
 
-            // Botun handle_webapp_data fonksiyonuna gidecek paket
-            const payload = {
-                type: type,
-                inputs: values
-            };
-
-            tg.sendData(JSON.stringify(payload));
+            // --- Telegram Onay Penceresi ---
+            tg.showConfirm(`${type.toUpperCase()} belgesi üretilecek. 150 TL bakiyenizden düşülecek. Onaylıyor musunuz?`, function(ok) {
+                if (ok) {
+                    const payload = {
+                        type: type,
+                        inputs: values
+                    };
+                    tg.sendData(JSON.stringify(payload));
+                    tg.close(); // Veriyi gönderdikten sonra paneli kapatır
+                }
+            });
         }
     </script>
 </body>
