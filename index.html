@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>İşlem Paneli</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --primary-color: #248bcf;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            margin: 0;
+            padding: 20px;
+        }
+        h2 {
+            font-size: 20px;
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .input-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--tg-theme-hint-color, #777);
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-sizing: border-box;
+            background-color: var(--tg-theme-secondary-bg-color, #f1f1f1);
+            color: var(--tg-theme-text-color, #000);
+            font-size: 15px;
+            outline: none;
+        }
+        input:focus {
+            border-color: var(--primary-color);
+        }
+        button {
+            width: 100%;
+            padding: 16px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        button:active {
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+
+    <h2 id="baslik">FORM YÜKLENİYOR...</h2>
+    <div id="form-container"></div>
+    <button onclick="gonder()">VERİLERİ ONAYLA VE GÖNDER</button>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand(); // Pencereyi yukarı kaydırarak tam aç
+
+        // Botun gönderdiği linkteki ?type= parametresini okur
+        const params = new URLSearchParams(window.location.search);
+        const type = params.get('type') || 'ruhsat';
+
+        // Form konfigürasyonları
+        const forms = {
+            "ruhsat": ["NOTERLİK", "PLAKA", "TESCİL SIRA NO", "MARKA", "MODEL", "CİNSİ", "İLK TESCİL TARİHİ", "TESCİL TARİHİ", "TİPİ", "MODEL YILI", "KATEGORİ", "RENK", "MOTOR NO", "ŞASİ NO", "AĞIRLIK", "YÜKLÜ AĞIRLIK", "KOLTUK", "SİLİNDİR HACMİ", "YAKIT", "KULLANIM AMACI", "AZAMİ YÜKLÜ", "RÖMORK KAPASİTE", "MOTOR GÜCÜ", "TİP ONAY NO", "AD", "SOYAD", "ADRES", "MUAYNE TARİHİ"],
+            "kimlik": ["TC NO", "AD", "SOYAD", "DOĞUM TARİHİ", "SERİ NO", "SON GEÇERLİLİK", "CİNSİYET", "UYRUK"],
+            "dekont": ["BANKA", "TUTAR", "GÖNDEREN", "ALICI IBAN", "TARİH/SAAT", "AÇIKLAMA"],
+            "ehliyet": ["TC NO", "AD", "SOYAD", "DOĞUM TARİHİ", "BELGE NO", "SINIFLAR"]
+        };
+
+        const container = document.getElementById('form-container');
+        const baslik = document.getElementById('baslik');
+
+        // Mevcut formu oluştur
+        if (forms[type]) {
+            baslik.innerText = type.toUpperCase() + " BİLGİLERİ";
+            forms[type].forEach(label => {
+                const group = document.createElement('div');
+                group.className = 'input-group';
+                group.innerHTML = `<label>${label}</label><input type="text" placeholder="${label} giriniz...">`;
+                container.appendChild(group);
+            });
+        } else {
+            baslik.innerText = "HATA: GEÇERSİZ TİP";
+        }
+
+        // Verileri bota gönderen fonksiyon
+        function gonder() {
+            const inputs = Array.from(container.querySelectorAll('input')).map(i => i.value);
+            
+            // Boş alan var mı kontrol et
+            if (inputs.some(v => v.trim() === "")) {
+                tg.showAlert("Lütfen tüm alanları doldurun!");
+                return;
+            }
+
+            // Veriyi bota yolla (JSON formatında)
+            const result = {
+                type: type,
+                inputs: inputs
+            };
+            
+            tg.sendData(JSON.stringify(result)); // Bu işlemden sonra pencere otomatik kapanır
+        }
+    </script>
+</body>
+</html>
