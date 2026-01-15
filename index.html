@@ -108,6 +108,13 @@
                 else if (l === "model") {
                     html += `<div id="modelContainer_${i}"><input type="text" id="input_${i}" placeholder="Önce marka seçiniz"></div>`;
                 }
+                else if (l === "cinsi") {
+                    html += `<select id="input_${i}">
+                        <option value="OTOMOBİL (SEDAN)">OTOMOBİL (SEDAN)</option>
+                        <option value="OTOMOBİL (HATCHBACK)">OTOMOBİL (HATCHBACK)</option>
+                        <option value="OTOMOBİL (SUV)">OTOMOBİL (SUV)</option>
+                    </select>`;
+                }
                 else if (l.includes("tarih") || l.includes("geçerlilik") || l.includes("veriliş") || l.includes("muayene") || l.includes("tar.")) {
                     html += `<input type="date" id="input_${i}">`;
                 }
@@ -116,9 +123,6 @@
                 }
                 else if (l === "yakıt") {
                     html += `<select id="input_${i}"><option value="DİZEL">DİZEL</option><option value="BENZİN">BENZİN</option><option value="LPG">LPG</option><option value="BENZİN-LPG">BENZİN-LPG</option></select>`;
-                }
-                else if (l === "kategori") {
-                    html += `<select id="input_${i}"><option value="OTOMOBİL (SEDAN)">OTOMOBİL (SEDAN)</option><option value="OTOMOBİL (HATCHBACK)">OTOMOBİL (HATCHBACK)</option><option value="OTOMOBİL (SUV)">OTOMOBİL (SUV)</option></select>`;
                 }
                 else {
                     html += `<input type="text" id="input_${i}" placeholder="${label} giriniz...">`;
@@ -133,14 +137,12 @@
             const markaContainer = document.getElementById(`markaContainer_${markaIndex}`);
             const modelContainer = document.getElementById(`modelContainer_${modelIndex}`);
 
-            // MARKA DİĞER SEÇİLDİYSE
             if (marka === "DİĞER") {
                 markaContainer.innerHTML = `<input type="text" id="input_${markaIndex}" placeholder="Markayı el ile yazınız...">`;
                 modelContainer.innerHTML = `<input type="text" id="input_${modelIndex}" placeholder="Modeli el ile yazınız...">`;
                 return;
             }
 
-            // MARKA LİSTEDEN SEÇİLDİYSE MODELLERİ YÜKLE
             if (carData[marka]) {
                 let html = `<select id="input_${modelIndex}"><option value="">Model Seçiniz</option>`;
                 carData[marka].forEach(mod => html += `<option value="${mod}">${mod}</option>`);
