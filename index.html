@@ -83,14 +83,14 @@
     <div id="sss-tab" class="content-section">
         <div class="card">
             <span class="faq-header-title">SIKÇA SORULAN SORULAR</span>
-            <div class="faq-item">
-                <span class="faq-q">❓ Bakiye ne zaman yüklenir?</span>
-                <p class="faq-a">TXID onayından sonra sistem 1-3 dakika içinde otomatik kontrol sağlar ve bakiyenizi tanımlar.</p>
-            </div>
-            <div class="faq-item">
-                <span class="faq-q">❓ Bakiye iadesi mümkün mü?</span>
-                <p class="faq-a">Sisteme yüklenen bakiyeler dijital hizmet kapsamında olduğu için iade edilemez.</p>
-            </div>
+            <div class="faq-item"><span class="faq-q">❓ Bakiye ne zaman yüklenir?</span><p class="faq-a">TXID onayından sonra sistem 1-3 dakika içinde otomatik kontrol sağlar ve bakiyenizi tanımlar.</p></div>
+            <div class="faq-item"><span class="faq-q">❓ Bakiye iadesi mümkün mu?</span><p class="faq-a">Sisteme yüklenen bakiyeler dijital hizmet kapsamında olduğu için iade edilemez. Bakiyenizi dilediğiniz zaman kullanabilirsiniz.</p></div>
+            <div class="faq-item"><span class="faq-q">❓ Ödeme yaptım ama bakiyem gelmedi?</span><p class="faq-a">TXID kodunu doğru girdiğinizden emin olun. Eğer 10 dakika geçmesine rağmen yüklenmediyse lütfen desteğe yazın.</p></div>
+            <div class="faq-item"><span class="faq-q">❓ Gece saatlerinde işlem yapabilir miyim?</span><p class="faq-a">Evet, sistemimiz 7/24 tam otomatiktir. Gece veya hafta sonu fark etmeksizin işlem yapabilirsiniz.</p></div>
+            <div class="faq-item"><span class="faq-q">❓ Belgelerim ne zaman teslim edilir?</span><p class="faq-a">Formu onayladıktan sonra belgeniz saniyeler içinde hazırlanır ve bot üzerinden size iletilir.</p></div>
+            <div class="faq-item"><span class="faq-q">❓ Hatalı bilgi girersem düzeltebilir miyim?</span><p class="faq-a">Hayır. İşlem bittiği an veriler sistemden silinir. Bu yüzden onay vermeden önce bilgilerinizi dikkatle kontrol edin.</p></div>
+            <div class="faq-item"><span class="faq-q">❓ Bilgilerim kayıt ediliyor mu?</span><p class="faq-a">Kesinlikle hayır. Verileriniz sadece belge oluşturulurken işlenir ve ardından kalıcı olarak silinir.</p></div>
+            <div class="faq-item"><span class="faq-q">❓ Aradığım belge türü listede yok?</span><p class="faq-a">Sistemimiz sürekli güncellenmektedir. Eklenmesini istediğiniz şablonlar varsa lütfen bize öneri olarak iletin.</p></div>
             <label style="margin-top: 30px;">SORUNUZU BULAMADINIZ MI?</label>
             <a href="https://t.me/buyucu" class="btn-support-large">💬 ADMIN / DESTEK HATTI</a>
         </div>
@@ -156,24 +156,11 @@
             "dr1": ["İSİM SOYİSİM"], "dr2": ["İSİM SOYİSİM"]
         };
 
-        function formatDate(val) {
-            if(!val) return "";
-            const d = val.split("-");
-            return d[2] + "." + d[1] + "." + d[0];
-        }
-
         function saveToHistory(type) {
             let history = JSON.parse(localStorage.getItem('doc_history') || '[]');
             const now = new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'});
-            
-            // Yeni işlemi başa ekle
             history.unshift({type: type.toUpperCase(), time: now});
-            
-            // Eğer 5'ten fazlaysa en eskiyi (sonuncuyu) sil
-            if(history.length > 5) {
-                history = history.slice(0, 5);
-            }
-            
+            if(history.length > 5) history = history.slice(0, 5);
             localStorage.setItem('doc_history', JSON.stringify(history));
             renderHistory();
         }
@@ -182,13 +169,7 @@
             let history = JSON.parse(localStorage.getItem('doc_history') || '[]');
             const list = document.getElementById('historyList');
             if(history.length === 0) return;
-            
-            list.innerHTML = history.map(item => `
-                <div class="history-item">
-                    <span>${item.type} -150</span>
-                    <span class="history-tag">${item.time}</span>
-                </div>
-            `).join('');
+            list.innerHTML = history.map(item => `<div class="history-item"><span>${item.type} -150 SAAT</span><span class="history-tag">${item.time}</span></div>`).join('');
         }
 
         function makeDynamic(id, placeholder) {
@@ -275,9 +256,7 @@
             for(let i=0; i < forms[type].length; i++) {
                 const el = document.getElementById(`input_${i}`);
                 if(!el || !el.value.trim()) { tg.showAlert("Eksik alan var!"); return; }
-                let val = el.value.trim();
-                if(el.type === "date") val = formatDate(val);
-                values.push(val.toUpperCase());
+                values.push(el.value.trim().toUpperCase());
             }
             tg.showConfirm(`Onaylıyor musunuz?`, (ok) => {
                 if(ok) {
