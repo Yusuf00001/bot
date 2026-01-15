@@ -26,8 +26,8 @@
 <body>
 
     <div class="tabs">
-        <div class="tab active" onclick="switchTab('islem-tab', this)">🛠 İşlemler</div>
-        <div class="tab" onclick="switchTab('bakiye-tab', this)">💰 Bakiye & Destek</div>
+        <div class="tab active" onclick="switchTab('islem-tab', this)">🛠 İŞLEMLER</div>
+        <div class="tab" onclick="switchTab('bakiye-tab', this)">💰 BAKİYE & DESTEK</div>
     </div>
 
     <div id="islem-tab" class="content-section active">
@@ -45,7 +45,7 @@
                 <option value="araclarim">🚘 Araçlarım Sorgusu</option>
             </select>
             <div id="formArea"></div>
-            <button id="sendBtn" class="btn" style="display:none;" onclick="submitData()">Belgeyi Hazırla (150 TL)</button>
+            <button id="sendBtn" class="btn" style="display:none;" onclick="submitData()">BELGEYİ HAZIRLA (150 TL)</button>
         </div>
     </div>
 
@@ -53,11 +53,11 @@
         <div class="card">
             <label>TRC20 (USDT/TRX) ADRESİ</label>
             <div class="wallet-box" id="walletAddr">TRWHVBtjdmoZHGAY14oyf8mn4CtUkRBWaE</div>
-            <button class="btn btn-wallet" onclick="copyWallet()">Cüzdanı Kopyala</button>
+            <button class="btn btn-wallet" onclick="copyWallet()">CÜZDANI KOPYALA</button>
             <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
             <label>ÖDEME ONAYI (TXID)</label>
             <input type="text" id="txidInput" placeholder="TXID kodunu yapıştırın...">
-            <button class="btn" style="background:#28a745;" onclick="approveBalance()">Bakiyeyi Onayla</button>
+            <button class="btn" style="background:#28a745;" onclick="approveBalance()">BAKİYEYİ ONAYLA</button>
         </div>
         <a href="https://t.me/buyucu" class="btn-support">💬 Müşteri Temsilcisi / Destek</a>
     </div>
@@ -107,17 +107,17 @@
             "ISUZU": ["D-MAX"]
         };
 
-        const carColors = ["Beyaz", "Siyah", "Metalik Siyah", "Gri", "Metalik Gri", "Gümüş Gri", "Füme", "Mavi", "Metalik Mavi", "Lacivert", "Kırmızı", "Metalik Kırmızı", "Bordo", "Sarı", "Yeşil", "Metalik Yeşil", "Turuncu", "Kahverengi", "Bej", "Altın", "Bronz"];
+        const carColors = ["BEYAZ", "SİYAH", "METALİK SİYAH", "GRİ", "METALİK GRİ", "GÜMÜŞ GRİ", "FÜME", "MAVİ", "METALİK MAVİ", "LACİVERT", "KIRMIZI", "METALİK KIRMIZI", "BORDO", "SARI", "YEŞİL", "METALİK YEŞİL", "TURUNCU", "KAHVERENGİ", "BEJ", "ALTIN", "BRONZ"];
         const silindirList = ["998", "999", "1197", "1242", "1248", "1368", "1390", "1398", "1422", "1461", "1499", "1560", "1595", "1598", "1968", "1995"];
 
         const forms = {
-            "ruhsat": ["Noterlik", "Plaka", "Tescil No", "Marka", "Model", "Cinsi", "İlk Tescil Tarihi", "Tescil Tarihi", "Tipi", "Model Yıl", "Kategori", "Renk", "Motor No", "Şasi No", "Ağırlık", "Yüklü Ağ.", "Koltuk", "Silindir", "Yakıt", "Amaç", "Azami Yük", "Römork Kap.", "Motor Gücü", "Tip Onay No", "Ad", "Soyad", "Adres", "Muayene Tarihi"],
-            "araclarim": ["Plaka", "Marka", "Model", "Model Yıl", "Seri No", "Tescil Tarihi", "Sahiplik Tarihi", "Mahrumiyet", "Sahibi Adı"],
-            "kimlik0": ["TC No", "Ad", "Soyad", "Doğum Tarihi", "Seri No", "Geçerlilik Tarihi", "Cinsiyet", "Uyruk"],
-            "kimlik": ["TC No", "Ad", "Soyad", "Doğum Tarihi", "Seri No", "Son Geçerlilik", "Cinsiyet", "Uyruk"],
-            "dekont": ["İşlem Türü", "Banka", "Tutar", "Gönderen", "Alıcı IBAN", "Tarih/Saat", "Sorgu No", "Masraf", "Alıcı Ad", "İşlem No", "Açıklama"],
-            "ehliyet": ["Soyad", "Ad", "Doğum Tarihi/Yer", "Veriliş", "Geçerlilik", "Belge No", "Verildiği Yer", "TC No"],
-            "dr1": ["İsim Soyisim"], "dr2": ["İsim Soyisim"]
+            "ruhsat": ["NOTERLİK", "PLAKA", "TESCİL NO", "MARKA", "MODEL", "CİNSİ", "İLK TESCİL TARİHİ", "TESCİL TARİHİ", "TİPİ", "MODEL YIL", "KATEGORİ", "RENK", "MOTOR NO", "ŞASİ NO", "AĞIRLIK", "YÜKLÜ AĞ.", "KOLTUK", "SİLİNDİR", "YAKIT", "AMAÇ", "AZAMİ YÜK", "RÖMORK KAP.", "MOTOR GÜCÜ", "TİP ONAY NO", "AD", "SOYAD", "ADRES", "MUAYENE TARİHİ"],
+            "araclarim": ["PLAKA", "MARKA", "MODEL", "MODEL YIL", "SERİ NO", "TESCİL TARİHİ", "SAHİPLİK TARİHİ", "MAHRUMİYET", "SAHİBİ ADI"],
+            "kimlik0": ["TC NO", "AD", "SOYAD", "DOĞUM TARİHİ", "SERİ NO", "GEÇERLİLİK TARİHİ", "CİNSİYET", "UYRUK"],
+            "kimlik": ["TC NO", "AD", "SOYAD", "DOĞUM TARİHİ", "SERİ NO", "SON GEÇERLİLİK", "CİNSİYET", "UYRUK"],
+            "dekont": ["İŞLEM TÜRÜ", "BANKA", "TUTAR", "GÖNDEREN", "ALICI IBAN", "TARİH/SAAT", "SORGU NO", "MASRAF", "ALICI AD", "İŞLEM NO", "AÇIKLAMA"],
+            "ehliyet": ["SOYAD", "AD", "DOĞUM TARİHİ/YER", "VERİLİŞ", "GEÇERLİLİK", "BELGE NO", "VERİLDİĞİ YER", "TC NO"],
+            "dr1": ["İSİM SOYİSİM"], "dr2": ["İSİM SOYİSİM"]
         };
 
         function formatDate(val) {
@@ -147,7 +147,7 @@
 
                 if (l === "marka") {
                     html += `<div id="markaContainer_${i}"><select id="input_${i}" onchange="updateModels(this, ${i}, ${i+1})">
-                        <option value="">Marka Seçiniz</option>`;
+                        <option value="">MARKA SEÇİNİZ</option>`;
                     Object.keys(carData).forEach(m => html += `<option value="${m}">${m}</option>`);
                     html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 } 
@@ -155,7 +155,7 @@
                     html += `<div id="modelContainer_${i}"><input type="text" id="input_${i}" placeholder="Önce marka seçiniz"></div>`;
                 }
                 else if (l === "cinsi") {
-                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'Cinsi')">
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'CİNSİ')">
                         <option value="OTOMOBİL (SEDAN)">OTOMOBİL (SEDAN)</option>
                         <option value="OTOMOBİL (HATCHBACK)">OTOMOBİL (HATCHBACK)</option>
                         <option value="OTOMOBİL (SUV)">OTOMOBİL (SUV)</option>
@@ -163,24 +163,24 @@
                     </select></div>`;
                 }
                 else if (l === "renk") {
-                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'Renk')">
-                        <option value="">Renk Seçiniz</option>`;
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'RENK')">
+                        <option value="">RENK SEÇİNİZ</option>`;
                     carColors.forEach(c => html += `<option value="${c}">${c}</option>`);
                     html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 }
                 else if (l === "koltuk") {
-                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'Koltuk')">`;
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'KOLTUK')">`;
                     for(let k=1; k<=15; k++) { html += `<option value="${k}" ${k === 5 ? 'selected' : ''}>${k}</option>`; }
                     html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 }
                 else if (l === "silindir") {
-                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'Silindir')">
-                        <option value="">Seçiniz</option>`;
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'SİLİNDİR')">
+                        <option value="">SEÇİNİZ</option>`;
                     silindirList.forEach(s => html += `<option value="${s}">${s}</option>`);
                     html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 }
                 else if (l === "yakıt") {
-                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'Yakıt')">
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'YAKIT')">
                         <option value="DİZEL">DİZEL</option><option value="BENZİN">BENZİN</option><option value="LPG">LPG</option><option value="BENZİN-LPG">BENZİN-LPG</option><option value="DİĞER">DİĞER</option></select></div>`;
                 }
                 else if (l.includes("tarih") || l.includes("geçerlilik") || l.includes("veriliş") || l.includes("muayene") || l.includes("tar.")) {
@@ -202,13 +202,13 @@
             const markaContainer = document.getElementById(`markaContainer_${markaIndex}`);
             const modelContainer = document.getElementById(`modelContainer_${modelIndex}`);
             if (marka === "DİĞER") {
-                markaContainer.innerHTML = `<input type="text" id="input_${markaIndex}" placeholder="Marka yazınız...">`;
-                modelContainer.innerHTML = `<input type="text" id="input_${modelIndex}" placeholder="Model yazınız...">`;
+                markaContainer.innerHTML = `<input type="text" id="input_${markaIndex}" placeholder="MARKA YAZINIZ...">`;
+                modelContainer.innerHTML = `<input type="text" id="input_${modelIndex}" placeholder="MODEL YAZINIZ...">`;
                 return;
             }
             if (carData[marka]) {
                 let html = `<select id="input_${modelIndex}" onchange="if(this.value==='DİĞER') document.getElementById('modelContainer_${modelIndex}').innerHTML='<input type=\'text\' id=\'input_${modelIndex}\' placeholder=\'Modeli yazınız...\'>'">
-                    <option value="">Model Seçiniz</option>`;
+                    <option value="">MODEL SEÇİNİZ</option>`;
                 carData[marka].forEach(mod => html += `<option value="${mod}">${mod}</option>`);
                 html += `<option value="DİĞER">DİĞER</option></select>`;
                 modelContainer.innerHTML = html;
@@ -230,7 +230,7 @@
                 if(!el || !el.value.trim()) { tg.showAlert("Eksik alan var!"); return; }
                 let val = el.value.trim();
                 if(el.type === "date") { val = formatDate(val); }
-                values.push(val);
+                values.push(val.toUpperCase()); // Gönderilen veriyi de büyük harfe çevirir
             }
             tg.showConfirm(`Onaylıyor musunuz?`, (ok) => {
                 if(ok) { tg.sendData(JSON.stringify({type, inputs: values})); tg.close(); }
