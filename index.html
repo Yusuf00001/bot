@@ -8,20 +8,23 @@
     <style>
         :root { --tg-theme-bg-color: #f0f2f5; --tg-theme-button-color: #2481cc; --tg-theme-text-color: #000000; }
         body { font-family: -apple-system, sans-serif; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); padding: 15px; margin: 0; }
-        .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); margin-bottom: 20px; }
         select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; }
         label { font-size: 12px; font-weight: bold; color: #555; display: block; margin-top: 10px; }
         .btn { background: var(--tg-theme-button-color); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
+        .btn-wallet { background: #28a745; margin-top: 5px; font-size: 13px; padding: 10px; }
         .header { text-align: center; margin-bottom: 15px; }
         .header h2 { color: var(--tg-theme-button-color); margin: 0; }
+        .wallet-box { background: #f8f9fa; border: 1px dashed #2481cc; padding: 10px; border-radius: 8px; word-break: break-all; font-family: monospace; font-size: 12px; text-align: center; margin-top: 10px; }
     </style>
 </head>
 <body>
     <div class="header"><h2>📊 İşlem Menüsü</h2></div>
+    
     <div class="card">
-        <label>Lütfen Belge Türü Seçiniz</label>
+        <label>🛠 BELGE ÜRETİM SİSTEMİ</label>
         <select id="typeSelect" onchange="createForm()">
-            <option value="">-- SEÇİNİZ --</option>
+            <option value="">-- BELGE TÜRÜ SEÇİNİZ --</option>
             <option value="kimlik">🪪 Yeni Kimlik (V1)</option>
             <option value="kimlik0">🪪 Kimlik (V0)</option>
             <option value="ehliyet">💳 Ehliyet (V2)</option>
@@ -31,9 +34,21 @@
             <option value="dr1">🩺 DR-1 Raporu</option>
             <option value="dr2">🩺 DR-2 Raporu</option>
         </select>
-        
         <div id="formArea"></div>
         <button id="sendBtn" class="btn" style="display:none;" onclick="submitData()">Belgeyi Hazırla (150 TL)</button>
+    </div>
+
+    <div class="card" style="border-top: 4px solid #28a745;">
+        <label>💰 BAKİYE YÜKLEME & ONAY</label>
+        <p style="font-size: 13px; color: #666;">TRX (TRC-20) gönderdikten sonra TXID kodunuzu girerek onaylayın.</p>
+        <div class="wallet-box" id="walletAddr">TRWHVBtjdmoZHGAY14oyf8mn4CtUkRBWaE</div>
+        <button class="btn btn-wallet" onclick="copyWallet()">Cüzdanı Kopyala</button>
+        
+        <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
+        
+        <label>TXID KODU</label>
+        <input type="text" id="txidInput" placeholder="İşlem kodunu (TXID) yapıştırın...">
+        <button class="btn" style="background:#28a745; margin-top:5px;" onclick="approveBalance()">Bakiyeyi Onayla</button>
     </div>
 
     <script>
@@ -41,22 +56,12 @@
         tg.expand();
 
         const forms = {
-            "dr1": ["İsim Soyisim"],
-            "dr2": ["İsim Soyisim"],
+            "dr1": ["İsim Soyisim"], "dr2": ["İsim Soyisim"],
             "araclarim": ["Plaka", "Marka", "Model", "Yıl", "Seri No", "Tescil Tarihi", "Sahiplik Tarihi", "Mahrumiyet", "Sahibi Adı"],
             "kimlik0": ["TC No", "Ad", "Soyad", "Doğum Tarihi", "Seri No", "Geçerlilik Tarihi", "Cinsiyet", "Uyruk"],
-            "ruhsat": [
-                "Noterlik", "Plaka", "Tescil No", "Marka", "Model", "Cinsi", 
-                "İlk Tescil", "Tescil Tar.", "Tipi", "Model Yıl", "Kategori", "Renk", 
-                "Motor No", "Şasi No", "Ağırlık", "Yüklü Ağ.", "Koltuk", "Silindir", 
-                "Yakıt", "Amaç", "Azami Yük", "Römork Kap.", "Motor Gücü", "Tip Onay No", 
-                "Ad", "Soyad", "Adres", "Muayene"
-            ],
+            "ruhsat": ["Noterlik", "Plaka", "Tescil No", "Marka", "Model", "Cinsi", "İlk Tescil", "Tescil Tar.", "Tipi", "Model Yıl", "Kategori", "Renk", "Motor No", "Şasi No", "Ağırlık", "Yüklü Ağ.", "Koltuk", "Silindir", "Yakıt", "Amaç", "Azami Yük", "Römork Kap.", "Motor Gücü", "Tip Onay No", "Ad", "Soyad", "Adres", "Muayene"],
             "kimlik": ["TC No", "Ad", "Soyad", "Doğum Tarihi", "Seri No", "Son Geçerlilik", "Cinsiyet", "Uyruk"],
-            "dekont": [
-                "İşlem Türü", "Banka", "Tutar", "Gönderen", "Alıcı IBAN", 
-                "Tarih/Saat", "Sorgu No", "Masraf", "Alıcı Ad", "İşlem No", "Açıklama"
-            ],
+            "dekont": ["İşlem Türü", "Banka", "Tutar", "Gönderen", "Alıcı IBAN", "Tarih/Saat", "Sorgu No", "Masraf", "Alıcı Ad", "İşlem No", "Açıklama"],
             "ehliyet": ["Soyad", "Ad", "Doğum Tarihi/Yer", "Veriliş", "Geçerlilik", "Belge No", "Verildiği Yer", "TC No"]
         };
 
@@ -65,40 +70,45 @@
             const area = document.getElementById('formArea');
             const btn = document.getElementById('sendBtn');
             area.innerHTML = "";
-            
             if(type && forms[type]) {
                 forms[type].forEach((label, i) => {
-                    area.innerHTML += `<label>${label}</label><input type="text" id="input_${i}" placeholder="${label} bilgisini girin...">`;
+                    area.innerHTML += `<label>${label}</label><input type="text" id="input_${i}" placeholder="${label} giriniz...">`;
                 });
                 btn.style.display = "block";
-            } else {
-                btn.style.display = "none";
-            }
+            } else { btn.style.display = "none"; }
+        }
+
+        function copyWallet() {
+            const el = document.createElement('textarea');
+            el.value = document.getElementById('walletAddr').innerText;
+            document.body.appendChild(el); el.select(); document.execCommand('copy');
+            document.body.removeChild(el); tg.showAlert("Cüzdan adresi kopyalandı!");
         }
 
         function submitData() {
             const type = document.getElementById('typeSelect').value;
             const values = [];
             const fieldsCount = forms[type].length;
-
             for(let i=0; i < fieldsCount; i++) {
                 const val = document.getElementById(`input_${i}`).value.trim();
-                if(!val) {
-                    tg.showAlert("Lütfen tüm alanları doldurun!");
-                    return;
-                }
+                if(!val) { tg.showAlert("Lütfen tüm alanları doldurun!"); return; }
                 values.push(val);
             }
-
-            // --- Telegram Onay Penceresi ---
-            tg.showConfirm(`${type.toUpperCase()} belgesi üretilecek. 150 TL bakiyenizden düşülecek. Onaylıyor musunuz?`, function(ok) {
+            tg.showConfirm(`${type.toUpperCase()} üretilecek (150 TL). Onaylıyor musunuz?`, function(ok) {
                 if (ok) {
-                    const payload = {
-                        type: type,
-                        inputs: values
-                    };
-                    tg.sendData(JSON.stringify(payload));
-                    tg.close(); // Veriyi gönderdikten sonra paneli kapatır
+                    tg.sendData(JSON.stringify({type: type, inputs: values}));
+                    tg.close();
+                }
+            });
+        }
+
+        function approveBalance() {
+            const txid = document.getElementById('txidInput').value.trim();
+            if(!txid) { tg.showAlert("TXID kodu boş olamaz!"); return; }
+            tg.showConfirm("Bakiye kontrol edilsin mi?", function(ok) {
+                if (ok) {
+                    tg.sendData(JSON.stringify({type: "bakiye_onay", txid: txid}));
+                    tg.close();
                 }
             });
         }
