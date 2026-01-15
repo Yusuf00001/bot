@@ -77,12 +77,6 @@
             <span class="faq-header-title">SIKÇA SORULAN SORULAR</span>
             <div class="faq-item"><span class="faq-q">❓ Bakiye ne zaman yüklenir?</span><p class="faq-a">TXID onayından sonra sistem 1-3 dakika içinde otomatik kontrol sağlar.</p></div>
             <div class="faq-item"><span class="faq-q">❓ Bakiye iadesi mümkün mu?</span><p class="faq-a">Sisteme yüklenen bakiyeler dijital hizmet kapsamında olduğu için iade edilemez.</p></div>
-            <div class="faq-item"><span class="faq-q">❓ Ödeme yaptım ama bakiyem gelmedi?</span><p class="faq-a">TXID kodunu doğru girdiğinizden emin olun.</p></div>
-            <div class="faq-item"><span class="faq-q">❓ Gece saatlerinde işlem yapabilir miyim?</span><p class="faq-a">Evet, sistemimiz 7/24 tam otomatiktir.</p></div>
-            <div class="faq-item"><span class="faq-q">❓ Belgelerim ne zaman teslim edilir?</span><p class="faq-a">Formu onayladıktan sonra belgeniz saniyeler içinde bot üzerinden size iletilir.</p></div>
-            <div class="faq-item"><span class="faq-q">❓ Hatalı bilgi girersem düzeltebilir miyim?</span><p class="faq-a">Hayır. İşlem bittiği an veriler sistemden silinir.</p></div>
-            <div class="faq-item"><span class="faq-q">❓ Bilgilerim kayıt ediliyor mu?</span><p class="faq-a">Kesinlikle hayır. Verileriniz işlemden hemen sonra silinir.</p></div>
-            <div class="faq-item"><span class="faq-q">❓ Aradığım belge türü listede yok?</span><p class="faq-a">Sürekli güncelleniyoruz. İstediğiniz şablon varsa lütfen bize iletin.</p></div>
             <label style="margin-top: 30px;">SORUNUZU BULAMADINIZ MI?</label>
             <a href="https://t.me/buyucu" class="btn-support-large">💬 ADMIN / DESTEK HATTI</a>
         </div>
@@ -136,7 +130,7 @@
         const carColors = ["BEYAZ", "SİYAH", "METALİK SİYAH", "GRİ", "METALİK GRİ", "GÜMÜŞ GRİ", "FÜME", "MAVİ", "METALİK MAVİ", "LACİVERT", "KIRMIZI", "METALİK KIRMIZI", "BORDO", "SARI", "YEŞİL", "METALİK YEŞİL", "TURUNCU", "KAHVERENGİ", "BEJ", "ALTIN", "BRONZ"];
         const silindirList = ["998", "999", "1197", "1242", "1248", "1368", "1390", "1398", "1422", "1461", "1499", "1560", "1595", "1598", "1968", "1995"];
         const yakitList = ["BENZİN", "DİZEL", "BENZİN/LPG", "ELEKTRİK", "HİBRİT"];
-        const cinsiList = ["OTOMOBİL (AF SEDAN)", "OTOMOBİL (AA SEDAN)", "KAMYONET (BB PANELVAN)", "MOTOSİKLET", "ARAÇ"];
+        const cinsiList = ["OTOMOBİL (SEDAN)", "OTOMOBİL (AA SEDAN)", "OTOMOBİL (HATCHBACK)", "OTOMOBİL (AB HATCHBACK)", "OTOMOBİL (STATION WAGON)", "KAMYONET"];
 
         const forms = {
             "ruhsat": ["NOTERLİK", "PLAKA", "TESCİL NO", "MARKA", "MODEL", "CİNSİ", "İLK TESCİL TARİHİ", "TESCİL TARİHİ", "TİPİ", "MODEL YIL", "KATEGORİ", "RENK", "MOTOR NO", "ŞASİ NO", "AĞIRLIK", "YÜKLÜ AĞ.", "KOLTUK", "SİLİNDİR", "YAKIT", "AMAÇ", "AZAMİ YÜK", "RÖMORK KAP.", "MOTOR GÜCÜ", "TİP ONAY NO", "AD", "SOYAD", "ADRES", "MUAYENE TARİHİ"],
@@ -148,7 +142,7 @@
             "dr1": ["İSİM SOYİSİM"], "dr2": ["İSİM SOYİSİM"]
         };
 
-        function makeDynamic(id, placeholder, originalType) {
+        function makeDynamic(id, placeholder) {
             const container = document.getElementById(`container_${id}`);
             const select = document.getElementById(`input_${id}`);
             if(select.value === "DİĞER") {
@@ -196,7 +190,7 @@
                     html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 }
                 else if (l.includes("TARİH") || l.includes("GEÇERLİLİK") || l.includes("VERİLİŞ")) {
-                    html += `<input type="text" id="input_${i}" placeholder="ÖRN: 01.01.1990">`;
+                    html += `<input type="text" id="input_${i}" placeholder="${label} GİRİNİZ...">`;
                 }
                 else {
                     html += `<input type="text" id="input_${i}" placeholder="${label} GİRİNİZ...">`;
