@@ -15,7 +15,21 @@
         .btn-wallet { background: #28a745; margin-top: 5px; font-size: 13px; padding: 10px; }
         .header { text-align: center; margin-bottom: 15px; }
         .header h2 { color: var(--tg-theme-button-color); margin: 0; }
-        .wallet-box { background: #f8f9fa; border: 1px dashed #2481cc; padding: 10px; border-radius: 8px; word-break: break-all; font-family: monospace; font-size: 12px; text-align: center; margin-top: 10px; }
+        
+        /* CÜZDAN KUTUSU - YAZI SİYAH VE BELİRGİN YAPILDI */
+        .wallet-box { 
+            background: #f8f9fa; 
+            border: 1px dashed #2481cc; 
+            padding: 12px; 
+            border-radius: 8px; 
+            word-break: break-all; 
+            font-family: 'Courier New', monospace; 
+            font-size: 14px; 
+            text-align: center; 
+            margin-top: 10px; 
+            color: #000000 !important; /* KESİN SİYAH */
+            font-weight: 800; /* KALIN YAZI */
+        }
     </style>
 </head>
 <body>
@@ -41,7 +55,9 @@
     <div class="card" style="border-top: 4px solid #28a745;">
         <label>💰 BAKİYE YÜKLEME & ONAY</label>
         <p style="font-size: 13px; color: #666;">TRX (TRC-20) gönderdikten sonra TXID kodunuzu girerek onaylayın.</p>
+        
         <div class="wallet-box" id="walletAddr">TRWHVBtjdmoZHGAY14oyf8mn4CtUkRBWaE</div>
+        
         <button class="btn btn-wallet" onclick="copyWallet()">Cüzdanı Kopyala</button>
         
         <hr style="margin: 15px 0; border: 0; border-top: 1px solid #eee;">
