@@ -1,53 +1,46 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: sans-serif; background: var(--tg-theme-bg-color, #fff); color: var(--tg-theme-text-color, #000); padding: 20px; }
-        .input-group { margin-bottom: 15px; }
-        label { display: block; font-size: 12px; color: gray; margin-bottom: 5px; }
-        input { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; background: var(--tg-theme-secondary-bg-color, #eee); color: #000; }
-        button { width: 100%; padding: 15px; background: #248bcf; color: white; border: none; border-radius: 10px; font-weight: bold; font-size: 16px; cursor: pointer; margin-top: 20px; }
+        body { font-family: sans-serif; padding: 20px; background: white; }
+        input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        button { width: 100%; padding: 15px; background: #0088cc; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-    <h2 id="baslik">FORM</h2>
-    <div id="form-container"></div>
-    <button onclick="gonder()">VERİLERİ ONAYLA VE GÖNDER</button>
+    <h3>RUHSAT FORMU</h3>
+    <div id="fields">
+        <input type="text" class="bilgi" placeholder="PLAKA">
+        <input type="text" class="bilgi" placeholder="MARKA">
+        <input type="text" class="bilgi" placeholder="MODEL">
+    </div>
+    <button id="btn">VERİLERİ ONAYLA VE GÖNDER</button>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        const params = new URLSearchParams(window.location.search);
-        const type = params.get('type') || 'ruhsat';
-        document.getElementById('baslik').innerText = type.toUpperCase() + " FORMU";
+        document.getElementById("btn").addEventListener("click", function() {
+            try {
+                // Tüm inputlardaki verileri topla
+                let inputs = Array.from(document.getElementsByClassName("bilgi")).map(i => i.value);
+                
+                // Veriyi hazırla
+                let sonuc = JSON.stringify({
+                    type: "ruhsat",
+                    inputs: inputs
+                });
 
-        const fields = {
-            "ruhsat": ["NOTERLİK", "PLAKA", "TESCİL SIRA NO", "MARKA", "MODEL", "CİNSİ", "İLK TESCİL TARİHİ", "TESCİL TARİHİ", "TİPİ", "MODEL YILI", "KATEGORİ", "RENK", "MOTOR NO", "ŞASİ NO", "AĞIRLIK", "YÜKLÜ AĞIRLIK", "KOLTUK", "SİLİNDİR HACMİ", "YAKIT", "KULLANIM AMACI", "AZAMİ YÜKLÜ", "RÖMORK KAPASİTE", "MOTOR GÜCÜ", "TİP ONAY NO", "AD", "SOYAD", "ADRES", "MUAYNE TARİHİ"]
-        };
-
-        const container = document.getElementById('form-container');
-        if(fields[type]) {
-            fields[type].forEach(label => {
-                const div = document.createElement('div');
-                div.className = 'input-group';
-                div.innerHTML = `<label>${label}</label><input type="text" placeholder="Giriş yapın...">`;
-                container.appendChild(div);
-            });
-        }
-
-        function gonder() {
-            const inputs = Array.from(container.querySelectorAll('input')).map(i => i.value);
-            if(inputs.some(v => v.trim() === "")) {
-                tg.showAlert("Lütfen tüm alanları doldurun!");
-                return;
+                // BOTA GÖNDER (Bu komut paneli KAPATIR)
+                tg.sendData(sonuc); 
+                
+            } catch (e) {
+                alert("Hata oluştu: " + e.message);
             }
-            // VERİYİ BOTA GÖNDEREN KRİTİK SATIR
-            tg.sendData(JSON.stringify({ type: type, inputs: inputs }));
-        }
+        });
     </script>
 </body>
 </html>
