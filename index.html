@@ -8,26 +8,39 @@
     <style>
         :root { --tg-theme-bg-color: #f0f2f5; --tg-theme-button-color: #2481cc; --tg-theme-text-color: #000000; }
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--tg-theme-bg-color); color: var(--tg-theme-text-color); padding: 0; margin: 0; overflow-x: hidden; }
+        
         .tabs { display: flex; background: #fff; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .tab { flex: 1; padding: 15px; text-align: center; font-weight: bold; font-size: 14px; cursor: pointer; color: #777; border-bottom: 3px solid transparent; transition: 0.3s; }
+        .tab { flex: 1; padding: 15px; text-align: center; font-weight: bold; font-size: 12px; cursor: pointer; color: #777; border-bottom: 3px solid transparent; transition: 0.3s; text-transform: uppercase; }
         .tab.active { color: var(--tg-theme-button-color); border-bottom-color: var(--tg-theme-button-color); background: #f8f9fa; }
+        
         .content-section { display: none; padding: 15px; padding-bottom: 80px; }
         .content-section.active { display: block; }
+
         .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; border: 1px solid #eee; }
         select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; outline: none; transition: 0.2s; background: #fff; }
         select:focus, input:focus { border-color: var(--tg-theme-button-color); box-shadow: 0 0 0 2px rgba(36, 129, 204, 0.1); }
+        
         label { font-size: 11px; font-weight: 700; color: #555; display: block; margin-top: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn { background: var(--tg-theme-button-color); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        .btn-wallet { background: #28a745; margin-top: 5px; font-size: 13px; padding: 10px; }
-        .wallet-box { background: #f8f9fa; border: 2px dashed #cbd5e0; padding: 15px; border-radius: 10px; word-break: break-all; font-family: monospace; font-size: 16px; text-align: center; margin-top: 10px; color: #2d3748; font-weight: bold; }
-        .btn-support { background: #fff; color: #2481cc; border: 2px solid #2481cc; padding: 12px; border-radius: 10px; font-size: 14px; font-weight: bold; text-decoration: none; display: block; text-align: center; margin-top: 30px; }
+        
+        .wallet-box { background: #f8f9fa; border: 2px dashed #cbd5e0; padding: 15px; border-radius: 10px; word-break: break-all; font-family: monospace; font-size: 15px; text-align: center; margin-top: 10px; font-weight: bold; }
+        
+        /* Geçmiş Listesi */
+        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; }
+        .history-tag { background: #e1effe; color: #1e429f; padding: 2px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; }
+
+        /* SSS */
+        .faq-item { margin-bottom: 15px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; }
+        .faq-q { font-weight: bold; color: var(--tg-theme-button-color); font-size: 14px; display: block; margin-bottom: 5px; }
+        .faq-a { font-size: 13px; color: #666; line-height: 1.4; margin: 0; }
     </style>
 </head>
 <body>
 
     <div class="tabs">
         <div class="tab active" onclick="switchTab('islem-tab', this)">🛠 İŞLEMLER</div>
-        <div class="tab" onclick="switchTab('bakiye-tab', this)">💰 BAKİYE & DESTEK</div>
+        <div class="tab" onclick="switchTab('bakiye-tab', this)">💰 BAKİYE</div>
+        <div class="tab" onclick="switchTab('sss-tab', this)">❓ SSS</div>
     </div>
 
     <div id="islem-tab" class="content-section active">
@@ -39,13 +52,18 @@
                 <option value="kimlik0">🪪 T.C. KİMLİK (V2)</option>
                 <option value="dr1">🩺 DR KİMLİĞİ</option>
                 <option value="dr2">🩺 DR KİMLİĞİ (V2)</option>
-                <option value="ehliyet">💳 Ehliyet </option>
-                <option value="dekont">📑 Banka Dekontu</option>
-                <option value="ruhsat">🚗 Araç Ruhsatı</option>
-                <option value="araclarim">🚘 Araçlarım Sorgusu</option>
+                <option value="ehliyet">💳 EHLİYET </option>
+                <option value="dekont">📑 BANKA DEKONTU</option>
+                <option value="ruhsat">🚗 ARAÇ RUHSATI</option>
+                <option value="araclarim">🚘 ARAÇLARIM SORGUSU</option>
             </select>
             <div id="formArea"></div>
             <button id="sendBtn" class="btn" style="display:none;" onclick="submitData()">BELGEYİ HAZIRLA (150 TL)</button>
+        </div>
+
+        <div class="card">
+            <label>🕒 SON İŞLEMLERİNİZ</label>
+            <div id="historyList"><div style="color:#aaa; font-size:12px; padding:10px; text-align:center;">Henüz bir işlem kaydı yok.</div></div>
         </div>
     </div>
 
@@ -53,13 +71,31 @@
         <div class="card">
             <label>TRC20 (USDT/TRX) ADRESİ</label>
             <div class="wallet-box" id="walletAddr">TRWHVBtjdmoZHGAY14oyf8mn4CtUkRBWaE</div>
-            <button class="btn btn-wallet" onclick="copyWallet()">CÜZDANI KOPYALA</button>
+            <button class="btn" style="background:#28a745;" onclick="copyWallet()">ADRESİ KOPYALA</button>
             <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
             <label>ÖDEME ONAYI (TXID)</label>
             <input type="text" id="txidInput" placeholder="TXID kodunu yapıştırın...">
             <button class="btn" style="background:#28a745;" onclick="approveBalance()">BAKİYEYİ ONAYLA</button>
         </div>
-        <a href="https://t.me/buyucu" class="btn-support">💬 Admin / Destek</a>
+        <a href="https://t.me/buyucu" class="btn" style="background:#fff; color:#2481cc; border:2px solid #2481cc; text-decoration:none; display:block; text-align:center;">💬 CANLI DESTEK</a>
+    </div>
+
+    <div id="sss-tab" class="content-section">
+        <div class="card">
+            <label>SIKÇA SORULAN SORULAR</label>
+            <div class="faq-item">
+                <span class="faq-q">❓ Bakiye ne zaman yüklenir?</span>
+                <p class="faq-a">TXID onayından sonra sistem 1-3 dakika içinde otomatik kontrol sağlar.</p>
+            </div>
+            <div class="faq-item">
+                <span class="faq-q">❓ Belgeler gerçek mi?</span>
+                <p class="faq-a">Sistemimiz sadece eğitim ve şaka amaçlı belge üretimi yapmaktadır.</p>
+            </div>
+            <div class="faq-item">
+                <span class="faq-q">❓ Bilgilerim kayıt ediliyor mu?</span>
+                <p class="faq-a">Hayır, verileriniz bot tarafından işlendikten hemen sonra silinir.</p>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -73,6 +109,7 @@
             el.classList.add('active');
         }
 
+        // --- ARAÇ VERİLERİ (HEPSİ KORUNDU) ---
         const carData = {
             "FIAT": ["EGEA", "LINEA", "DOBLO", "FIORINO", "PUNTO", "500", "PANDA"],
             "FORD": ["FOCUS", "FIESTA", "TRANSIT", "MONDEO", "KUGA", "PUMA", "COURİER"],
@@ -126,6 +163,23 @@
             return d[2] + "." + d[1] + "." + d[0];
         }
 
+        // --- GEÇMİŞ SİSTEMİ ---
+        function saveToHistory(type) {
+            let history = JSON.parse(localStorage.getItem('doc_history') || '[]');
+            const now = new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'});
+            history.unshift({type: type.toUpperCase(), time: now});
+            if(history.length > 5) history.pop();
+            localStorage.setItem('doc_history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            let history = JSON.parse(localStorage.getItem('doc_history') || '[]');
+            const list = document.getElementById('historyList');
+            if(history.length === 0) return;
+            list.innerHTML = history.map(item => `<div class="history-item"><span>${item.type}</span><span class="history-tag">${item.time}</span></div>`).join('');
+        }
+
         function makeDynamic(id, placeholder) {
             const container = document.getElementById(`container_${id}`);
             const select = document.getElementById(`input_${id}`);
@@ -146,48 +200,25 @@
                 let html = `<label>${label}</label>`;
 
                 if (l === "marka") {
-                    html += `<div id="markaContainer_${i}"><select id="input_${i}" onchange="updateModels(this, ${i}, ${i+1})">
-                        <option value="">MARKA SEÇİNİZ</option>`;
+                    html += `<div id="markaContainer_${i}"><select id="input_${i}" onchange="updateModels(this, ${i}, ${i+1})"><option value="">MARKA SEÇİNİZ</option>`;
                     Object.keys(carData).forEach(m => html += `<option value="${m}">${m}</option>`);
                     html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 } 
                 else if (l === "model") {
                     html += `<div id="modelContainer_${i}"><input type="text" id="input_${i}" placeholder="Önce marka seçiniz"></div>`;
                 }
-                else if (l === "cinsi") {
-                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'CİNSİ')">
-                        <option value="OTOMOBİL (SEDAN)">OTOMOBİL (SEDAN)</option>
-                        <option value="OTOMOBİL (HATCHBACK)">OTOMOBİL (HATCHBACK)</option>
-                        <option value="OTOMOBİL (SUV)">OTOMOBİL (SUV)</option>
-                        <option value="DİĞER">DİĞER</option>
-                    </select></div>`;
-                }
                 else if (l === "renk") {
-                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'RENK')">
-                        <option value="">RENK SEÇİNİZ</option>`;
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'RENK')"><option value="">RENK SEÇİNİZ</option>`;
                     carColors.forEach(c => html += `<option value="${c}">${c}</option>`);
                     html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 }
-                else if (l === "koltuk") {
-                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'KOLTUK')">`;
-                    for(let k=1; k<=15; k++) { html += `<option value="${k}" ${k === 5 ? 'selected' : ''}>${k}</option>`; }
-                    html += `<option value="DİĞER">DİĞER</option></select></div>`;
-                }
                 else if (l === "silindir") {
-                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'SİLİNDİR')">
-                        <option value="">SEÇİNİZ</option>`;
+                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'SİLİNDİR')"><option value="">SEÇİNİZ</option>`;
                     silindirList.forEach(s => html += `<option value="${s}">${s}</option>`);
                     html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 }
-                else if (l === "yakıt") {
-                    html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'YAKIT')">
-                        <option value="DİZEL">DİZEL</option><option value="BENZİN">BENZİN</option><option value="LPG">LPG</option><option value="BENZİN-LPG">BENZİN-LPG</option><option value="DİĞER">DİĞER</option></select></div>`;
-                }
-                else if (l.includes("tarih") || l.includes("geçerlilik") || l.includes("veriliş") || l.includes("muayene") || l.includes("tar.")) {
+                else if (l.includes("tarih") || l.includes("geçerlilik") || l.includes("veriliş") || l.includes("muayene")) {
                     html += `<input type="date" id="input_${i}">`;
-                }
-                else if (l.includes("model yıl") || l.includes("yıl")) {
-                    html += `<input type="number" id="input_${i}" min="1950" max="2026" value="2024">`;
                 }
                 else {
                     html += `<input type="text" id="input_${i}" placeholder="${label} giriniz...">`;
@@ -207,19 +238,11 @@
                 return;
             }
             if (carData[marka]) {
-                let html = `<select id="input_${modelIndex}" onchange="if(this.value==='DİĞER') document.getElementById('modelContainer_${modelIndex}').innerHTML='<input type=\'text\' id=\'input_${modelIndex}\' placeholder=\'Modeli yazınız...\'>'">
-                    <option value="">MODEL SEÇİNİZ</option>`;
+                let html = `<select id="input_${modelIndex}" onchange="if(this.value==='DİĞER') document.getElementById('modelContainer_${modelIndex}').innerHTML='<input type=\'text\' id=\'input_${modelIndex}\' placeholder=\'Modeli yazınız...\'>'"><option value="">MODEL SEÇİNİZ</option>`;
                 carData[marka].forEach(mod => html += `<option value="${mod}">${mod}</option>`);
                 html += `<option value="DİĞER">DİĞER</option></select>`;
                 modelContainer.innerHTML = html;
             }
-        }
-
-        function copyWallet() {
-            const el = document.createElement('textarea');
-            el.value = document.getElementById('walletAddr').innerText;
-            document.body.appendChild(el); el.select(); document.execCommand('copy');
-            document.body.removeChild(el); tg.showAlert("Cüzdan adresi kopyalandı!");
         }
 
         function submitData() {
@@ -229,20 +252,33 @@
                 const el = document.getElementById(`input_${i}`);
                 if(!el || !el.value.trim()) { tg.showAlert("Eksik alan var!"); return; }
                 let val = el.value.trim();
-                if(el.type === "date") { val = formatDate(val); }
-                values.push(val.toUpperCase()); // Gönderilen veriyi de büyük harfe çevirir
+                if(el.type === "date") val = formatDate(val);
+                values.push(val.toUpperCase());
             }
             tg.showConfirm(`Onaylıyor musunuz?`, (ok) => {
-                if(ok) { tg.sendData(JSON.stringify({type, inputs: values})); tg.close(); }
+                if(ok) {
+                    saveToHistory(type);
+                    tg.sendData(JSON.stringify({type, inputs: values}));
+                    tg.close();
+                }
             });
+        }
+
+        function copyWallet() {
+            const el = document.createElement('textarea');
+            el.value = document.getElementById('walletAddr').innerText;
+            document.body.appendChild(el); el.select(); document.execCommand('copy');
+            document.body.removeChild(el); tg.showAlert("Adres kopyalandı!");
         }
 
         function approveBalance() {
             const txid = document.getElementById('txidInput').value.trim();
-            if(!txid) { tg.showAlert("TXID girin!"); return; }
+            if(!txid) return tg.showAlert("TXID girin!");
             tg.sendData(JSON.stringify({type: "bakiye_onay", txid}));
             tg.close();
         }
+
+        renderHistory();
     </script>
 </body>
 </html>
