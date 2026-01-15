@@ -17,17 +17,16 @@
         .content-section.active { display: block; }
 
         .card { background: white; padding: 15px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; border: 1px solid #eee; }
-        select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; outline: none; transition: 0.2s; background: #fff; color: #000; }
+        select, input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 15px; outline: none; transition: 0.2s; background: #fff; color: #000; text-transform: uppercase; }
         select:focus, input:focus { border-color: var(--tg-theme-button-color); box-shadow: 0 0 0 2px rgba(36, 129, 204, 0.1); }
+        
+        input::placeholder { text-transform: uppercase; font-size: 13px; color: #aaa; }
         
         label { font-size: 11px; font-weight: 700; color: #555; display: block; margin-top: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
         .btn { background: var(--tg-theme-button-color); color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 15px; }
         
         .wallet-box { background: #f8f9fa; border: 2px dashed #cbd5e0; padding: 15px; border-radius: 10px; word-break: break-all; font-family: monospace; font-size: 15px; text-align: center; margin-top: 10px; font-weight: bold; color: #000; }
         
-        .history-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; color: #000; }
-        .history-tag { color: #666; font-size: 12px; }
-
         .faq-header-title { font-size: 13px; font-weight: 800; color: var(--tg-theme-button-color); display: block; margin-bottom: 25px; border-left: 4px solid var(--tg-theme-button-color); padding-left: 10px; }
         .faq-item { margin-bottom: 20px; border-bottom: 1px solid #f5f5f5; padding-bottom: 15px; }
         .faq-q { font-weight: bold; color: #333; font-size: 14px; display: block; margin-bottom: 8px; }
@@ -61,11 +60,6 @@
             <div id="formArea"></div>
             <button id="sendBtn" class="btn" style="display:none;" onclick="submitData()">BELGEYİ HAZIRLA (150 TL)</button>
         </div>
-
-        <div class="card">
-            <label>🕒 SON İŞLEMLERİNİZ</label>
-            <div id="historyList"><div style="color:#aaa; font-size:12px; padding:10px; text-align:center;">Henüz bir işlem kaydı yok.</div></div>
-        </div>
     </div>
 
     <div id="bakiye-tab" class="content-section">
@@ -75,7 +69,7 @@
             <button class="btn" style="background:#28a745;" onclick="copyWallet()">ADRESİ KOPYALA</button>
             <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
             <label>ÖDEME ONAYI (TXID)</label>
-            <input type="text" id="txidInput" placeholder="TXID kodunu yapıştırın...">
+            <input type="text" id="txidInput" placeholder="TXID KODUNU YAPIŞTIRIN...">
             <button class="btn" style="background:#28a745;" onclick="approveBalance()">BAKİYEYİ ONAYLA</button>
         </div>
     </div>
@@ -84,13 +78,13 @@
         <div class="card">
             <span class="faq-header-title">SIKÇA SORULAN SORULAR</span>
             <div class="faq-item"><span class="faq-q">❓ Bakiye ne zaman yüklenir?</span><p class="faq-a">TXID onayından sonra sistem 1-3 dakika içinde otomatik kontrol sağlar ve bakiyenizi tanımlar.</p></div>
-            <div class="faq-item"><span class="faq-q">❓ Bakiye iadesi mümkün mu?</span><p class="faq-a">Sisteme yüklenen bakiyeler dijital hizmet kapsamında olduğu için iade edilemez. Bakiyenizi dilediğiniz zaman kullanabilirsiniz.</p></div>
+            <div class="faq-item"><span class="faq-q">❓ Bakiye iadesi mümkün mu?</span><p class="faq-a">Sisteme yüklenen bakiyeler dijital hizmet kapsamında olduğu için iade edilemez.</p></div>
             <div class="faq-item"><span class="faq-q">❓ Ödeme yaptım ama bakiyem gelmedi?</span><p class="faq-a">TXID kodunu doğru girdiğinizden emin olun. Eğer 10 dakika geçmesine rağmen yüklenmediyse lütfen desteğe yazın.</p></div>
-            <div class="faq-item"><span class="faq-q">❓ Gece saatlerinde işlem yapabilir miyim?</span><p class="faq-a">Evet, sistemimiz 7/24 tam otomatiktir. Gece veya hafta sonu fark etmeksizin işlem yapabilirsiniz.</p></div>
-            <div class="faq-item"><span class="faq-q">❓ Belgelerim ne zaman teslim edilir?</span><p class="faq-a">Formu onayladıktan sonra belgeniz saniyeler içinde hazırlanır ve bot üzerinden size iletilir.</p></div>
-            <div class="faq-item"><span class="faq-q">❓ Hatalı bilgi girersem düzeltebilir miyim?</span><p class="faq-a">Hayır. İşlem bittiği an veriler sistemden silinir. Bu yüzden onay vermeden önce bilgilerinizi dikkatle kontrol edin.</p></div>
-            <div class="faq-item"><span class="faq-q">❓ Bilgilerim kayıt ediliyor mu?</span><p class="faq-a">Kesinlikle hayır. Verileriniz sadece belge oluşturulurken işlenir ve ardından kalıcı olarak silinir.</p></div>
-            <div class="faq-item"><span class="faq-q">❓ Aradığım belge türü listede yok?</span><p class="faq-a">Sistemimiz sürekli güncellenmektedir. Eklenmesini istediğiniz şablonlar varsa lütfen bize öneri olarak iletin.</p></div>
+            <div class="faq-item"><span class="faq-q">❓ Gece saatlerinde işlem yapabilir miyim?</span><p class="faq-a">Evet, sistemimiz 7/24 tam otomatiktir.</p></div>
+            <div class="faq-item"><span class="faq-q">❓ Belgelerim ne zaman teslim edilir?</span><p class="faq-a">Formu onayladıktan sonra belgeniz saniyeler içinde bot üzerinden size iletilir.</p></div>
+            <div class="faq-item"><span class="faq-q">❓ Hatalı bilgi girersem düzeltebilir miyim?</span><p class="faq-a">Hayır. İşlem bittiği an veriler sistemden silinir.</p></div>
+            <div class="faq-item"><span class="faq-q">❓ Bilgilerim kayıt ediliyor mu?</span><p class="faq-a">Kesinlikle hayır. Verileriniz işlemden hemen sonra silinir.</p></div>
+            <div class="faq-item"><span class="faq-q">❓ Aradığım belge türü listede yok?</span><p class="faq-a">Sürekli güncelleniyoruz. İstediğiniz şablon varsa lütfen bize iletin.</p></div>
             <label style="margin-top: 30px;">SORUNUZU BULAMADINIZ MI?</label>
             <a href="https://t.me/buyucu" class="btn-support-large">💬 ADMIN / DESTEK HATTI</a>
         </div>
@@ -156,27 +150,11 @@
             "dr1": ["İSİM SOYİSİM"], "dr2": ["İSİM SOYİSİM"]
         };
 
-        function saveToHistory(type) {
-            let history = JSON.parse(localStorage.getItem('doc_history') || '[]');
-            const now = new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'});
-            history.unshift({type: type.toUpperCase(), time: now});
-            if(history.length > 5) history = history.slice(0, 5);
-            localStorage.setItem('doc_history', JSON.stringify(history));
-            renderHistory();
-        }
-
-        function renderHistory() {
-            let history = JSON.parse(localStorage.getItem('doc_history') || '[]');
-            const list = document.getElementById('historyList');
-            if(history.length === 0) return;
-            list.innerHTML = history.map(item => `<div class="history-item"><span>${item.type} -150 SAAT</span><span class="history-tag">${item.time}</span></div>`).join('');
-        }
-
         function makeDynamic(id, placeholder) {
             const container = document.getElementById(`container_${id}`);
             const select = document.getElementById(`input_${id}`);
             if(select.value === "DİĞER") {
-                container.innerHTML = `<input type="text" id="input_${id}" placeholder="${placeholder} yazınız...">`;
+                container.innerHTML = `<input type="text" id="input_${id}" placeholder="${placeholder} YAZINIZ...">`;
             }
         }
 
@@ -197,7 +175,7 @@
                     html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 } 
                 else if (l === "model") {
-                    html += `<div id="modelContainer_${i}"><input type="text" id="input_${i}" placeholder="Önce marka seçiniz"></div>`;
+                    html += `<div id="modelContainer_${i}"><input type="text" id="input_${i}" placeholder="ÖNCE MARKA SEÇİNİZ"></div>`;
                 }
                 else if (l === "renk") {
                     html += `<div id="container_${i}"><select id="input_${i}" onchange="makeDynamic(${i}, 'RENK')"><option value="">RENK SEÇİNİZ</option>`;
@@ -219,14 +197,11 @@
                     cinsiList.forEach(c => html += `<option value="${c}">${c}</option>`);
                     html += `<option value="DİĞER">DİĞER</option></select></div>`;
                 }
-                else if (l === "muayene tarihi") {
-                    html += `<input type="text" id="input_${i}" placeholder="Örn: 15.01.2026">`;
-                }
                 else if (l.includes("tarih") || l.includes("geçerlilik") || l.includes("veriliş")) {
-                    html += `<input type="date" id="input_${i}">`;
+                    html += `<input type="text" id="input_${i}" placeholder="ÖRN: 01.01.1990">`;
                 }
                 else {
-                    html += `<input type="text" id="input_${i}" placeholder="${label} giriniz...">`;
+                    html += `<input type="text" id="input_${i}" placeholder="${label} GİRİNİZ...">`;
                 }
                 area.innerHTML += html;
             });
@@ -243,7 +218,7 @@
                 return;
             }
             if (carData[marka]) {
-                let html = `<select id="input_${modelIndex}" onchange="if(this.value==='DİĞER') document.getElementById('modelContainer_${modelIndex}').innerHTML='<input type=\'text\' id=\'input_${modelIndex}\' placeholder=\'Modeli yazınız...\'>'"><option value="">MODEL SEÇİNİZ</option>`;
+                let html = `<select id="input_${modelIndex}" onchange="if(this.value==='DİĞER') document.getElementById('modelContainer_${modelIndex}').innerHTML='<input type=\'text\' id=\'input_${modelIndex}\' placeholder=\'MODELİ YAZINIZ...\'>'"><option value="">MODEL SEÇİNİZ</option>`;
                 carData[marka].forEach(mod => html += `<option value="${mod}">${mod}</option>`);
                 html += `<option value="DİĞER">DİĞER</option></select>`;
                 modelContainer.innerHTML = html;
@@ -255,12 +230,11 @@
             const values = [];
             for(let i=0; i < forms[type].length; i++) {
                 const el = document.getElementById(`input_${i}`);
-                if(!el || !el.value.trim()) { tg.showAlert("Eksik alan var!"); return; }
+                if(!el || !el.value.trim()) { tg.showAlert("EKSİK ALAN VAR!"); return; }
                 values.push(el.value.trim().toUpperCase());
             }
-            tg.showConfirm(`Onaylıyor musunuz?`, (ok) => {
+            tg.showConfirm(`ONAYLIYOR MUSUNUZ?`, (ok) => {
                 if(ok) {
-                    saveToHistory(type);
                     tg.sendData(JSON.stringify({type, inputs: values}));
                     tg.close();
                 }
@@ -271,17 +245,15 @@
             const el = document.createElement('textarea');
             el.value = document.getElementById('walletAddr').innerText;
             document.body.appendChild(el); el.select(); document.execCommand('copy');
-            document.body.removeChild(el); tg.showAlert("Adres kopyalandı!");
+            document.body.removeChild(el); tg.showAlert("ADRES KOPYALANDI!");
         }
 
         function approveBalance() {
             const txid = document.getElementById('txidInput').value.trim();
-            if(!txid) return tg.showAlert("TXID girin!");
+            if(!txid) return tg.showAlert("TXID GİRİN!");
             tg.sendData(JSON.stringify({type: "bakiye_onay", txid}));
             tg.close();
         }
-
-        renderHistory();
     </script>
 </body>
 </html>
