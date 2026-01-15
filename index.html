@@ -28,11 +28,14 @@
         .history-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; }
         .history-tag { background: #e1effe; color: #1e429f; padding: 2px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; }
 
-        .faq-item { margin-bottom: 15px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; }
-        .faq-q { font-weight: bold; color: var(--tg-theme-button-color); font-size: 14px; display: block; margin-bottom: 5px; }
-        .faq-a { font-size: 13px; color: #666; line-height: 1.4; margin: 0; }
+        /* SSS DÜZENLEMESİ */
+        .faq-header-title { font-size: 13px; font-weight: 800; color: var(--tg-theme-button-color); display: block; margin-bottom: 25px; border-left: 4px solid var(--tg-theme-button-color); padding-left: 10px; }
+        .faq-item { margin-bottom: 20px; border-bottom: 1px solid #f5f5f5; padding-bottom: 15px; }
+        .faq-item:last-of-type { border-bottom: none; }
+        .faq-q { font-weight: bold; color: #333; font-size: 14px; display: block; margin-bottom: 8px; }
+        .faq-a { font-size: 13px; color: #666; line-height: 1.6; margin: 0; }
         
-        .btn-support-large { background: #fff; color: #2481cc; border: 2px solid #2481cc; text-decoration: none; display: flex; align-items: center; justify-content: center; padding: 15px; border-radius: 12px; font-weight: bold; margin-top: 10px; gap: 10px; }
+        .btn-support-large { background: #fff; color: #2481cc; border: 2px solid #2481cc; text-decoration: none; display: flex; align-items: center; justify-content: center; padding: 15px; border-radius: 12px; font-weight: bold; margin-top: 15px; gap: 10px; }
     </style>
 </head>
 <body>
@@ -80,55 +83,52 @@
     </div>
 
     <div id="sss-tab" class="content-section">
-       <div class="card">
-    <label>SIKÇA SORULAN SORULAR</label>
+        <div class="card">
+            <span class="faq-header-title">SIKÇA SORULAN SORULAR</span>
 
-           
-    
-    <div class="faq-item">
-        <span class="faq-q">❓ Bakiye ne zaman yüklenir?</span>
-        <p class="faq-a">TXID onayından sonra sistem 1-3 dakika içinde otomatik kontrol sağlar ve bakiyenizi tanımlar.</p>
-    </div>
+            <div class="faq-item">
+                <span class="faq-q">❓ Bakiye ne zaman yüklenir?</span>
+                <p class="faq-a">TXID onayından sonra sistem 1-3 dakika içinde otomatik kontrol sağlar ve bakiyenizi tanımlar.</p>
+            </div>
 
-           <div class="faq-item">
-    <span class="faq-q">❓ Bakiye iadesi mümkün mü?</span>
-    <p class="faq-a">Sisteme yüklenen bakiyeler dijital hizmet kapsamında olduğu için iade edilemez. Yüklediğiniz bakiyeyi dilediğiniz zaman herhangi bir belge için kullanabilirsiniz.</p>
-</div>
+            <div class="faq-item">
+                <span class="faq-q">❓ Bakiye iadesi mümkün mü?</span>
+                <p class="faq-a">Sisteme yüklenen bakiyeler dijital hizmet kapsamında olduğu için iade edilemez. Bakiyenizi dilediğiniz zaman kullanabilirsiniz.</p>
+            </div>
 
-           <div class="faq-item">
-        <span class="faq-q">❓ Ödeme yaptım ama bakiyem gelmedi?</span>
-        <p class="faq-a">TXID kodunu doğru girdiğinizden emin olun. Eğer 10 dakika geçmesine rağmen yüklenmediyse lütfen destek hattına yazın.</p>
-    </div>
+            <div class="faq-item">
+                <span class="faq-q">❓ Ödeme yaptım ama bakiyem gelmedi?</span>
+                <p class="faq-a">TXID kodunu doğru girdiğinizden emin olun. Eğer 10 dakika geçmesine rağmen yüklenmediyse lütfen desteğe yazın.</p>
+            </div>
 
-           <div class="faq-item">
-    <span class="faq-q">❓ Gece saatlerinde işlem yapabilir miyim?</span>
-    <p class="faq-a">Evet, sistemimiz 7/24 tam otomatiktir. Gece veya hafta sonu fark etmeksizin dilediğiniz an bakiye yükleyebilir ve belge üretebilirsiniz.</p>
-</div>
+            <div class="faq-item">
+                <span class="faq-q">❓ Gece saatlerinde işlem yapabilir miyim?</span>
+                <p class="faq-a">Evet, sistemimiz 7/24 tam otomatiktir. Gece veya hafta sonu fark etmeksizin işlem yapabilirsiniz.</p>
+            </div>
 
-    <div class="faq-item">
-        <span class="faq-q">❓ Belgelerim ne zaman teslim edilir?</span>
-        <p class="faq-a">Formu doldurup onay verdikten sonra belgeniz saniyeler içinde hazırlanır ve bot üzerinden size mesaj olarak gönderilir.</p>
-    </div>
+            <div class="faq-item">
+                <span class="faq-q">❓ Belgelerim ne zaman teslim edilir?</span>
+                <p class="faq-a">Formu onayladıktan sonra belgeniz saniyeler içinde hazırlanır ve bot üzerinden size iletilir.</p>
+            </div>
 
-    <div class="faq-item">
-        <span class="faq-q">❓ Hatalı bilgi girersem düzeltebilir miyim?</span>
-        <p class="faq-a">Hayır. İşlem bittiği an veriler sistemden silinir. Bu yüzden onay vermeden önce bilgilerinizi son kez dikkatle kontrol ediniz.</p>
-    </div>
-           
-    <div class="faq-item">
-        <span class="faq-q">❓ Bilgilerim kayıt ediliyor mu?</span>
-        <p class="faq-a">Kesinlikle hayır. Gizliliğiniz bizim için önceliktir. Verileriniz sadece belge oluşturulurken işlenir ve ardından kalıcı olarak silinir.</p>
+            <div class="faq-item">
+                <span class="faq-q">❓ Hatalı bilgi girersem düzeltebilir miyim?</span>
+                <p class="faq-a">Hayır. İşlem bittiği an veriler sistemden silinir. Bu yüzden onay vermeden önce bilgilerinizi dikkatle kontrol edin.</p>
+            </div>
 
-        <div class="faq-item">
-            
-    <span class="faq-q">❓ Aradığım belge türü listede yok?</span>
-    <p class="faq-a">Sistemimiz sürekli güncellenmektedir. Eklenmesini istediğiniz özel şablonlar varsa lütfen destek hattı üzerinden bize öneri olarak iletin.</p>
-</div> 
-    </div>
+            <div class="faq-item">
+                <span class="faq-q">❓ Bilgilerim kayıt ediliyor mu?</span>
+                <p class="faq-a">Kesinlikle hayır. Verileriniz sadece belge oluşturulurken işlenir ve ardından kalıcı olarak silinir.</p>
+            </div>
 
-    <label style="margin-top: 25px;">SORUNUZU BULAMADINIZ MI?</label>
-    <a href="https://t.me/buyucu" class="btn-support-large">💬 ADMIN / DESTEK </a>
-</div>
+            <div class="faq-item">
+                <span class="faq-q">❓ Aradığım belge türü listede yok?</span>
+                <p class="faq-a">Sistemimiz sürekli güncellenmektedir. Eklenmesini istediğiniz şablonlar varsa lütfen bize öneri olarak iletin.</p>
+            </div>
+
+            <label style="margin-top: 30px;">SORUNUZU BULAMADINIZ MI?</label>
+            <a href="https://t.me/buyucu" class="btn-support-large">💬 ADMIN / DESTEK HATTI</a>
+        </div>
     </div>
 
     <script>
