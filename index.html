@@ -79,6 +79,7 @@
         };
 
         const carColors = ["Beyaz", "Siyah", "Metalik Siyah", "Gri", "Metalik Gri", "Gümüş Gri", "Füme", "Mavi", "Metalik Mavi", "Lacivert", "Kırmızı", "Metalik Kırmızı", "Bordo", "Sarı", "Yeşil", "Metalik Yeşil", "Turuncu", "Kahverengi", "Bej", "Altın", "Bronz"];
+        const silindirList = ["998", "999", "1197", "1242", "1248", "1368", "1390", "1398", "1422", "1461", "1499", "1560", "1595", "1598", "1968", "1995"];
 
         const forms = {
             "ruhsat": ["Noterlik", "Plaka", "Tescil No", "Marka", "Model", "Cinsi", "İlk Tescil Tarihi", "Tescil Tarihi", "Tipi", "Model Yıl", "Kategori", "Renk", "Motor No", "Şasi No", "Ağırlık", "Yüklü Ağ.", "Koltuk", "Silindir", "Yakıt", "Amaç", "Azami Yük", "Römork Kap.", "Motor Gücü", "Tip Onay No", "Ad", "Soyad", "Adres", "Muayene Tarihi"],
@@ -128,6 +129,11 @@
                         html += `<option value="${k}" ${k === 5 ? 'selected' : ''}>${k}</option>`;
                     }
                     html += `</select>`;
+                }
+                else if (l === "silindir") {
+                    html += `<select id="input_${i}"><option value="">Hacim Seçiniz</option>`;
+                    silindirList.forEach(s => html += `<option value="${s}">${s}</option>`);
+                    html += `<option value="DİĞER">DİĞER</option></select>`;
                 }
                 else if (l.includes("tarih") || l.includes("geçerlilik") || l.includes("veriliş") || l.includes("muayene") || l.includes("tar.")) {
                     html += `<input type="date" id="input_${i}">`;
