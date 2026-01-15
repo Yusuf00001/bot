@@ -1,45 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        body { font-family: sans-serif; padding: 20px; background: white; }
-        input { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; }
-        button { width: 100%; padding: 15px; background: #0088cc; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        body { font-family: sans-serif; padding: 20px; background: #f4f4f4; }
+        .input-group { margin-bottom: 10px; }
+        label { display: block; font-size: 12px; color: #666; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: #0088cc; color: white; border: none; border-radius: 10px; font-weight: bold; margin-top: 20px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <h3>RUHSAT FORMU</h3>
-    <div id="fields">
-        <input type="text" class="bilgi" placeholder="PLAKA">
-        <input type="text" class="bilgi" placeholder="MARKA">
-        <input type="text" class="bilgi" placeholder="MODEL">
-    </div>
-    <button id="btn">VERİLERİ ONAYLA VE GÖNDER</button>
+    <h3 id="title">FORM PANELİ</h3>
+    <div id="form-container"></div>
+    <button id="submitBtn">VERİLERİ ONAYLA VE GÖNDER</button>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        document.getElementById("btn").addEventListener("click", function() {
-            try {
-                // Tüm inputlardaki verileri topla
-                let inputs = Array.from(document.getElementsByClassName("bilgi")).map(i => i.value);
-                
-                // Veriyi hazırla
-                let sonuc = JSON.stringify({
-                    type: "ruhsat",
-                    inputs: inputs
-                });
+        const params = new URLSearchParams(window.location.search);
+        const type = params.get('type') || 'ruhsat';
+        document.getElementById('title').innerText = type.toUpperCase() + " BİLGİLERİ";
 
-                // BOTA GÖNDER (Bu komut paneli KAPATIR)
-                tg.sendData(sonuc); 
-                
-            } catch (e) {
-                alert("Hata oluştu: " + e.message);
-            }
+        const fields = ["NOTERLİK", "PLAKA", "TESCİL SIRA NO", "MARKA", "MODEL", "CİNSİ", "İLK TESCİL TARİHİ", "TESCİL TARİHİ", "TİPİ", "MODEL YILI", "KATEGORİ", "RENK", "MOTOR NO", "ŞASİ NO", "AĞIRLIK", "YÜKLÜ AĞIRLIK", "KOLTUK", "SİLİNDİR HACMİ", "YAKIT", "KULLANIM AMACI", "AZAMİ YÜKLÜ", "RÖMORK KAPASİTE", "MOTOR GÜCÜ", "TİP ONAY NO", "AD", "SOYAD", "ADRES", "MUAYNE TARİHİ"];
+
+        const container = document.getElementById('form-container');
+        fields.forEach(f => {
+            const div = document.createElement('div');
+            div.className = 'input-group';
+            div.innerHTML = `<label>${f}</label><input type="text" class="form-input" placeholder="${f} giriniz...">`;
+            container.appendChild(div);
+        });
+
+        document.getElementById("submitBtn").addEventListener("click", () => {
+            const values = Array.from(document.getElementsByClassName("form-input")).map(i => i.value);
+            // KRİTİK: Veriyi JSON olarak bota gönderir ve paneli kapatır
+            tg.sendData(JSON.stringify({ type: type, inputs: values }));
         });
     </script>
 </body>
