@@ -25,14 +25,14 @@
         
         .wallet-box { background: #f8f9fa; border: 2px dashed #cbd5e0; padding: 15px; border-radius: 10px; word-break: break-all; font-family: monospace; font-size: 15px; text-align: center; margin-top: 10px; font-weight: bold; }
         
-        /* Geçmiş Listesi */
         .history-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; font-size: 13px; }
         .history-tag { background: #e1effe; color: #1e429f; padding: 2px 8px; border-radius: 5px; font-size: 10px; font-weight: bold; }
 
-        /* SSS */
         .faq-item { margin-bottom: 15px; border-bottom: 1px solid #f0f0f0; padding-bottom: 10px; }
         .faq-q { font-weight: bold; color: var(--tg-theme-button-color); font-size: 14px; display: block; margin-bottom: 5px; }
         .faq-a { font-size: 13px; color: #666; line-height: 1.4; margin: 0; }
+        
+        .btn-support-large { background: #fff; color: #2481cc; border: 2px solid #2481cc; text-decoration: none; display: flex; align-items: center; justify-content: center; padding: 15px; border-radius: 12px; font-weight: bold; margin-top: 10px; gap: 10px; }
     </style>
 </head>
 <body>
@@ -77,7 +77,7 @@
             <input type="text" id="txidInput" placeholder="TXID kodunu yapıştırın...">
             <button class="btn" style="background:#28a745;" onclick="approveBalance()">BAKİYEYİ ONAYLA</button>
         </div>
-        <a href="https://t.me/buyucu" class="btn" style="background:#fff; color:#2481cc; border:2px solid #2481cc; text-decoration:none; display:block; text-align:center;">💬 CANLI DESTEK</a>
+        <a href="https://t.me/buyucu" class="btn-support-large">💬 CANLI DESTEK HATTI</a>
     </div>
 
     <div id="sss-tab" class="content-section">
@@ -95,6 +95,9 @@
                 <span class="faq-q">❓ Bilgilerim kayıt ediliyor mu?</span>
                 <p class="faq-a">Hayır, verileriniz bot tarafından işlendikten hemen sonra silinir.</p>
             </div>
+            
+            <label style="margin-top: 25px;">SORUNUZU BULAMADINIZ MI?</label>
+            <a href="https://t.me/buyucu" class="btn-support-large">💬 MÜŞTERİ TEMSİLCİSİNE BAĞLAN</a>
         </div>
     </div>
 
@@ -109,7 +112,6 @@
             el.classList.add('active');
         }
 
-        // --- ARAÇ VERİLERİ (HEPSİ KORUNDU) ---
         const carData = {
             "FIAT": ["EGEA", "LINEA", "DOBLO", "FIORINO", "PUNTO", "500", "PANDA"],
             "FORD": ["FOCUS", "FIESTA", "TRANSIT", "MONDEO", "KUGA", "PUMA", "COURİER"],
@@ -163,7 +165,6 @@
             return d[2] + "." + d[1] + "." + d[0];
         }
 
-        // --- GEÇMİŞ SİSTEMİ ---
         function saveToHistory(type) {
             let history = JSON.parse(localStorage.getItem('doc_history') || '[]');
             const now = new Date().toLocaleTimeString('tr-TR', {hour: '2-digit', minute:'2-digit'});
